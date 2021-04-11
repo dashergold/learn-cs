@@ -31,13 +31,15 @@ namespace dictionaryio
         }
 
         static Dictionary<string, string> makeDictionary() {
-            var dict = new Dictionary<string, string> {
-                { "fisk", "fish" },
-                { "gurka", "cucumber" },
-                { "ananas", "pineapple" },
-                { "träd", "tree" }
-                
-            };
+            var dict = new Dictionary<string, string> {};
+            var input = File.OpenText("D:\\code\\cs\\dictionaryio\\dict.txt");
+            var line = input.ReadLine();
+            while(line != null) {
+                var pieces = line.Split(',');
+                dict.Add(pieces[0], pieces[1]);
+                line = input.ReadLine();
+            }
+            input.Close();
             return dict;
         }
     }

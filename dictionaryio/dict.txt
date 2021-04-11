@@ -1,0 +1,5 @@
+fisk,fish
+gurka,cucumber
+ananas,pineapple
+träd,tree
+eld,fire
