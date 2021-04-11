@@ -14,7 +14,13 @@ namespace dictionaryio
             var input = File.OpenText("D:\\code\\cs\\dictionaryio\\input.txt");
             var line = input.ReadLine();
             while(line != null) {
-                Console.WriteLine(line);
+                if(dict.ContainsKey(line)){
+                    var translate = dict[line];
+                    Console.WriteLine(translate);
+                }else {
+                    Console.WriteLine("Unknown Word: {0}", line);
+                }
+                
                 line = input.ReadLine();
                 
             }
@@ -30,6 +36,7 @@ namespace dictionaryio
                 { "gurka", "cucumber" },
                 { "ananas", "pineapple" },
                 { "träd", "tree" }
+                
             };
             return dict;
         }
