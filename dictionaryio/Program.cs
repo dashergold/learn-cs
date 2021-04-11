@@ -1,5 +1,7 @@
 ﻿using System;
 
+using System.IO;
+
 using System.Collections.Generic;
 
 namespace dictionaryio
@@ -9,6 +11,15 @@ namespace dictionaryio
         static void Main(string[] args)
         {
             var dict = makeDictionary();
+            var input = File.OpenText("D:\\code\\cs\\dictionaryio\\input.txt");
+            var line = input.ReadLine();
+            while(line != null) {
+                Console.WriteLine(line);
+                line = input.ReadLine();
+                
+            }
+            input.Close();
+            
 
             
         }
