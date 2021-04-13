@@ -6,7 +6,9 @@ namespace strings
     {
         static void Main(string[] args)
         {
-            
+
+
+
             if(args.Length >= 1) {
                 for(int i = 0; i < args.Length; i=i+1){
                     string s = args[i];
@@ -17,11 +19,27 @@ namespace strings
                         Console.Write(' ');
                     }        
                     Console.WriteLine();
+                    chopString(s, 2);
+                    chopString(s, 3);
                 }
                
             } else {
                 Console.WriteLine("error: you must supply a parameter");
             }
+        }
+        
+        static void chopString(string s, int chop) {
+            for(int j = 0; j<s.Length; j=j+chop) {
+                        int nChars;
+                        if(j+chop<=s.Length){
+                            nChars=chop;
+                        }else {
+                            nChars = s.Length-j;
+                        }
+                        Console.Write(s.Substring(j, nChars));
+                        Console.Write(' ');
+                    }
+                    Console.WriteLine();
         }
     }
 }
