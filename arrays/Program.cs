@@ -7,11 +7,17 @@ namespace arrays
         static void Main(string[] args)
         {
             var r = reverseStrings(new string[] { "a", "b", "c", "d" });
+            var cop = copyStrings(new string[] { "a", "b", "c", "d" });
             var empty = new double[0];
             var one = new double[] { 0.5 };
             var two = new double[] { -12, 92378237923923982982.0 };
             var three = new double[] { 1, 2, 3 };
             var c = new int[5];
+            printMedian(new double[]{3});
+            printMedian(new double[]{3, 4 , 12, 6});
+            printMedian(new double[]{3, 7, 2, 1, 9});
+
+            sparseCopies();
             printAverage(empty);
             printAverage(two);
             printAverage(one);
@@ -20,7 +26,12 @@ namespace arrays
         }
 
 
-
+static void sparseCopies() {
+    var a1 = sparseCopy(new string []{"a"}); //  a
+    var a2 = sparseCopy(new string []{"a", "b"}); //  a
+    var a3 = sparseCopy(new string []{"a", "b", "c"}); //  a c
+    var a4 = sparseCopy(new string []{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j" }); //  a c e g i
+}
         static void printAverage(double[] data)
         {
             var a = average(data);
@@ -110,11 +121,41 @@ namespace arrays
             for (int i = array.Length - 1; i >= 0; --i, ++j)
             {
                 r[j] = array[i];
-
             }
             return r;
 
+        }
 
+        static string [] copyStrings(string[] array)
+        {
+            var cop = new string[array.Length];
+            
+            for(int i=0; i<array.Length; ++i)
+            {
+                cop[i] = array[i];
+            }
+            return cop;
+        }
+
+        static void printMedian(double[] array)
+        {
+            Console.WriteLine("median is {0}", medianDouble(array));
+        }
+        static double medianDouble(double [] array)
+        {
+
+            Array.Sort(array);
+            if(array.Length%2==0)
+            {
+                var i= array.Length/2;
+                var med=(array[i-1]+array[i])/2;
+                return med;
+            }else
+            {
+                var i = array.Length/2;
+                return array[i];
+            }
+            
         }
     }
 }
