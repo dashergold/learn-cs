@@ -73,7 +73,8 @@ namespace arrays
             for (int i = 0; i < data.Length; ++i)
             {
 
-                p = p * data[i];
+                // same as p = p * data[i];
+                p *= data[i];
 
 
             }
