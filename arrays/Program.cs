@@ -14,7 +14,11 @@ namespace arrays
             printAverage(two);
             printAverage(one);
             printProduct(three);
+            Console.WriteLine("the sum is {0}", skipSum(new double[]{8, -3, 7, -4, 1, -5.0/2, 9}));
         }
+
+
+        
         static void printAverage(double[] data)
         {
             var a = average(data);
@@ -79,6 +83,22 @@ namespace arrays
             Console.WriteLine("product is {0}", a);
         }
 
+    //compute the sum of every other number
+    static double skipSum(double[] data)
+        {
+            if (data.Length == 0)
+            {
+                return 0;
+            }
+            double sum = 0;
+            for (int i = 0; i < data.Length; i+=2)
+            {
+                sum = sum + data[i];
+            }
+            return sum;
+
+
+        }
         
     }
 }
