@@ -6,10 +6,42 @@ namespace arrays
     {
         static void Main(string[] args)
         {
-            var a = new string[3];
-            a[0] = "hej";
-            a[1] = "din";
-            a[2] = "tjockskalle";
+            var empty=new double[0];
+            var one = new double[]{0.5};
+            var two = new double[]{-12, 92378237923923982982.0};
+            printAverage(empty);
+            printAverage(two);
+            printAverage(one);
+        }
+        static void printAverage(double[] data)
+        {
+            var a = average(data);
+            Console.WriteLine("average is {0}", a);
+        }
+        static double average(double[] data)
+        {
+            if (data.Length == 0)
+            {
+                return 0;
+            }
+            double sum = 0;
+            for (int i = 0; i < data.Length; ++i)
+            {
+                sum = sum + data[i];
+            }
+            return sum/data.Length;
+
+
+        }
+        static void stringArrays()
+        {
+            var a = new string[]
+                {
+                "hej",
+                "din",
+                "tjockskalle"
+                };
+
             var s = string.Join(" ", a);
             var a2 = s.Split(" ");
             Console.WriteLine(s);
@@ -18,6 +50,10 @@ namespace arrays
             Console.WriteLine(s2);
 
             Console.WriteLine(a2[1]);
+
+
+
+
         }
     }
 }

@@ -6,7 +6,9 @@ namespace strings
     {
         static void Main(string[] args)
         {
-
+            Console.WriteLine((char) 8147);
+            Console.WriteLine((int) 'A');
+            Console.WriteLine(Convert.ToDouble("5675678787867856785647457547575.3"));
 
 
             if(args.Length >= 1) {
@@ -21,6 +23,7 @@ namespace strings
                     Console.WriteLine();
                     chopString(s, 2);
                     chopString(s, 3);
+                    dumpString(s);
                 }
                
             } else {
@@ -40,6 +43,16 @@ namespace strings
                         Console.Write(' ');
                     }
                     Console.WriteLine();
+        }
+        static void dumpString(string s) {
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(s);
+            for (int i = 0; i<bytes.Length; i=i+1) {
+                Console.Write((int)bytes[i]);
+                Console.Write(' ');
+
+            }
+            Console.WriteLine();
+            
         }
     }
 }

@@ -9,8 +9,8 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/net5.0/strings.dll",
-            "args": ["test", "firework", "tree", "banan"],
+            "program": "${workspaceFolder}/bin/Debug/net5.0/arrays.dll",
+            "args": [],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "stopAtEntry": false
