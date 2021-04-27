@@ -9,9 +9,11 @@ namespace arrays
             var empty=new double[0];
             var one = new double[]{0.5};
             var two = new double[]{-12, 92378237923923982982.0};
+            var three = new double[]{1, 2, 3};
             printAverage(empty);
             printAverage(two);
             printAverage(one);
+            printProduct(three);
         }
         static void printAverage(double[] data)
         {
@@ -55,5 +57,28 @@ namespace arrays
 
 
         }
+    static double product(double[] data)
+    {
+        if (data.Length == 0)
+        {
+            return 0;
+        }
+        double p = 1;
+        for(int i = 0; i<data.Length; ++i)
+        {
+            
+            p = p*data[i];
+            
+
+        }
+        return p;
+    }
+    static void printProduct(double[] data)
+        {
+            var a = product(data);
+            Console.WriteLine("product is {0}", a);
+        }
+
+        
     }
 }
