@@ -5,7 +5,7 @@ using System.Text;
 //var a = File.OpenText(@"D:\code\cs\code translator\index.txt");
 //var n = readNumber(a);
 
-var a = File.ReadAllText(@"D:\code\python\Translate code python\translations\job.txt");
+var a = File.ReadAllText(@"D:\code\python\Translate code python\translations\job.axol");
 var t = new Tokenizer();
 t.tokenize(a);
 

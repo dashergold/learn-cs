@@ -33,12 +33,17 @@ namespace code_translator
             DOT,
             GT,
             LT,
+            IMPORT,
+            PRINT,
         }
 
+        //swedish keywords (will be moved)
         private Dictionary<string, Token> tokenValues = new() {
-        {"medan", Token.WHILE },
-        {"om", Token.IF },
-        { "+",Token.PLUS},
+            {"medan", Token.WHILE },
+            {"om", Token.IF },
+            {"importera", Token.IMPORT },
+            {"skriv", Token.PRINT},
+            {"annarsom", Token.ELIF},
 
 
     };
@@ -69,12 +74,13 @@ namespace code_translator
                     return (n, i);
 
                 }
-                var d = c - 48;
+                var d = c - '0';
                 n = n * 10 + d;
                 ++i;
             }
             return (n, i);
         }
+
         (string, int) tokenizeWord(string text, int i)
         {
             var sb = new StringBuilder();
@@ -132,7 +138,7 @@ namespace code_translator
                     int a;
                     (a, i) = tokenizeNumber(text, i);
                     Console.Write(Token.NUMBER);
-                    Console.Write(" ");
+                    Console.Write($" ({a}) ");
 
 
 
@@ -142,7 +148,7 @@ namespace code_translator
                     string s;
                     (s, i) = tokenizeString(text, i);
                     Console.Write(Token.STRING);
-                    Console.Write(" ");
+                    Console.Write($" ({s}) ");
 
 
                 }
@@ -160,7 +166,7 @@ namespace code_translator
                     else
                     {
                         Console.Write(Token.ID);
-                        Console.Write(" ");
+                        Console.Write($" ({s}) ");
                     }
                 }
                 else if (c == '(')
