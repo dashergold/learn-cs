@@ -13,22 +13,26 @@ namespace code_translator
         enum Token
         {
             WHILE = 1,
-            IF = 2,
-            ELSE = 3,
-            ELIF = 4,
-            RETURN = 5,
-            PLUS = 6,
-            FUNCTION = 7,
-            EQ = 8,
-            TRUE = 9,
-            FALSE = 10,
-            NUMBER = 11,
-            COMMA = 12,
-            STRING = 13,
-            LPAREN = 14,
-            RPAREN = 15,
-            LCURLY = 16,
-            RCURLY = 17,
+            IF,
+            ELSE,
+            ELIF,
+            RETURN,
+            PLUS,
+            FUNCTION,
+            EQ,
+            TRUE,
+            FALSE,
+            NUMBER,
+            COMMA,
+            STRING,
+            LPAREN,
+            RPAREN,
+            LCURLY,
+            RCURLY,
+            ID,
+            DOT,
+            GT,
+            LT,
         }
 
         private Dictionary<string, Token> tokenValues = new() {
@@ -68,17 +72,55 @@ namespace code_translator
                 var d = c - 48;
                 n = n * 10 + d;
                 ++i;
-            }return (n, i);
-        } 
-
-
-                public void tokenize(string text)
+            }
+            return (n, i);
+        }
+        (string, int) tokenizeWord(string text, int i)
+        {
+            var sb = new StringBuilder();
+            while (i < text.Length)
+            {
+                var c = text[i];
+                if (!char.IsLetter(c))
                 {
-                    int i = 0;
+                    return (sb.ToString(), i);
+                }
 
-                    while (i < text.Length)
-                    {
-                        char c = text[i];
+                sb.Append(c);
+                ++i;
+            }
+            return (sb.ToString(), i);
+        }
+        (string, int) tokenizeString(string text, int i)
+        {
+            var sb = new StringBuilder();
+
+            //skip the '"'
+            ++i;
+            while (i < text.Length)
+            {
+                var c = text[i];
+                if (c == '"')
+                {
+                    ++i;
+                    return (sb.ToString(), i);
+                }
+                sb.Append(c);
+                ++i;
+            }
+            throw new InvalidOperationException("An error has occured");
+
+
+        }
+
+
+        public void tokenize(string text)
+        {
+            int i = 0;
+
+            while (i < text.Length)
+            {
+                char c = text[i];
                 if (c == '#')
                 {
                     //discard comment
@@ -88,18 +130,113 @@ namespace code_translator
                 {
                     //read number
                     int a;
-                    (a, i) = tokenizeNumber (text, i);
+                    (a, i) = tokenizeNumber(text, i);
                     Console.Write(Token.NUMBER);
                     Console.Write(" ");
 
-                    
+
+
                 }
+                else if (c == '"')
+                {
+                    string s;
+                    (s, i) = tokenizeString(text, i);
+                    Console.Write(Token.STRING);
+                    Console.Write(" ");
+
+
+                }
+                else if (char.IsLetter(c))
+                {
+                    //tokenize word
+                    string s;
+                    (s, i) = tokenizeWord(text, i);
+                    if (tokenValues.ContainsKey(s))
+                    {
+                        var t = tokenValues[s];
+                        Console.Write(t);
+                        Console.Write(" ");
+                    }
+                    else
+                    {
+                        Console.Write(Token.ID);
+                        Console.Write(" ");
+                    }
+                }
+                else if (c == '(')
+                {
+                    Console.Write(Token.LPAREN);
+                    Console.Write(" ");
+                    ++i;
+                }
+                else if (c == ')')
+                {
+                    Console.Write(Token.RPAREN);
+                    Console.Write(" ");
+                    ++i;
+                }
+                else if (c == '{')
+                {
+                    Console.Write(Token.LCURLY);
+                    Console.Write(" ");
+                    ++i;
+                }
+                else if (c == '}')
+                {
+                    Console.Write(Token.RCURLY);
+                    Console.Write(" ");
+                    ++i;
+
+                }
+                else if (c == ',')
+                {
+                    Console.Write(Token.COMMA);
+                    Console.Write(" ");
+                    ++i;
+
+                }
+                else if (c == '=')
+                {
+                    Console.Write(Token.EQ);
+                    Console.Write(" ");
+                    ++i;
+
+
+                }
+                else if (c == '<')
+                {
+                    Console.Write(Token.LT);
+                    Console.Write(" ");
+                    ++i;
+
+                }
+                else if (c == '>')
+                {
+                    Console.Write(Token.GT);
+                    Console.Write(" ");
+                    ++i;
+
+                }
+                else if (c == '.')
+                {
+                    Console.Write(Token.DOT);
+                    Console.Write(" ");
+                    ++i;
+
+                }
+                else if (char.IsWhiteSpace(c))
+                {
+
+                    ++i;
+
+                }
+
                 else
                 {
                     Console.Write(c);
                     ++i;
                 }
-                    }
-                }
             }
         }
+    }
+}
