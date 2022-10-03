@@ -8,4 +8,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="codeTranslateMain\**" />
+    <EmbeddedResource Remove="codeTranslateMain\**" />
+    <None Remove="codeTranslateMain\**" />
+  </ItemGroup>
+
 </Project>
