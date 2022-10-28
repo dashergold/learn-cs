@@ -22,14 +22,26 @@ foreach (var token in tokens)
 ////test("3");
 //test("gurka");
 //test("\"gurka\"");
-test("x+3");
-static void test(string program)
+//testParser("x+3");
+testInterpreter("3-2");
+static void testParser(string program)
 {
     var p = new Parser();
     var t = new Tokenizer();
     var tokens = t.tokenize(program);
     var e = p.parseExp(tokens, 0);
     Console.WriteLine(e.ToString());
+}
+static void testInterpreter(string program)
+{
+    var p = new Parser();
+    var t = new Tokenizer();
+    var tokens = t.tokenize(program);
+    var e = p.parseExp(tokens, 0);
+    var i = new Interpreter();
+    var result = i.interpretExp(e.Item1);
+    Console.Write(result.ToString());
+    
 }
 
 
