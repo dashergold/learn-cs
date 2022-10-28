@@ -4,44 +4,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static code_translator.Tokenizer;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace code_translator
 {
+    public class Token
+    {
+        public TokenType type;
+        public object value;
+
+    }
+    public enum TokenType
+    {
+        WHILE = 1,
+        IF,
+        ELSE,
+        ELIF,
+        RETURN,
+        PLUS,
+        FUNCTION,
+        EQ,
+        TRUE,
+        FALSE,
+        NUMBER,
+        COMMA,
+        STRING,
+        LPAREN,
+        RPAREN,
+        LCURLY,
+        RCURLY,
+        ID,
+        DOT,
+        GT,
+        LT,
+        IMPORT,
+        PRINT,
+    }
     internal class Tokenizer
     {
-        public enum TokenType
-        {
-            WHILE = 1,
-            IF,
-            ELSE,
-            ELIF,
-            RETURN,
-            PLUS,
-            FUNCTION,
-            EQ,
-            TRUE,
-            FALSE,
-            NUMBER,
-            COMMA,
-            STRING,
-            LPAREN,
-            RPAREN,
-            LCURLY,
-            RCURLY,
-            ID,
-            DOT,
-            GT,
-            LT,
-            IMPORT,
-            PRINT,
-        }
-        public class Token
-        {
-            public TokenType type;
-            public object value;
-
-        }
+       
+        
 
         //swedish keywords (will be moved)
         private Dictionary<string, TokenType> tokenValues = new() {
@@ -245,6 +248,13 @@ namespace code_translator
                 else if (c == '.')
                 {
                     tokens.Add(token(TokenType.DOT));
+
+                    ++i;
+
+                }
+                else if (c == '+')
+                {
+                    tokens.Add(token(TokenType.PLUS));
 
                     ++i;
 

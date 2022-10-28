@@ -4,7 +4,7 @@ using System.Text;
 
 //var a = File.OpenText(@"D:\code\cs\code translator\index.txt");
 //var n = readNumber(a);
-
+#if whole_file 
 var a = File.ReadAllText(@"D:\code\python\Translate code python\translations\job.axol");
 var t = new Tokenizer();
 var tokens = t.tokenize(a);
@@ -18,7 +18,19 @@ foreach (var token in tokens)
         Console.Write($" ({token.value}) ");
     }
 }
-
+#endif 
+////test("3");
+//test("gurka");
+//test("\"gurka\"");
+test("x+3");
+static void test(string program)
+{
+    var p = new Parser();
+    var t = new Tokenizer();
+    var tokens = t.tokenize(program);
+    var e = p.parseExp(tokens, 0);
+    Console.WriteLine(e.ToString());
+}
 
 
 
