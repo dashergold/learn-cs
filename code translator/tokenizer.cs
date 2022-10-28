@@ -10,7 +10,7 @@ namespace code_translator
 {
     internal class Tokenizer
     {
-        enum Token
+        public enum TokenType
         {
             WHILE = 1,
             IF,
@@ -36,14 +36,20 @@ namespace code_translator
             IMPORT,
             PRINT,
         }
+        public class Token
+        {
+            public TokenType type;
+            public object value;
+
+        }
 
         //swedish keywords (will be moved)
-        private Dictionary<string, Token> tokenValues = new() {
-            {"medan", Token.WHILE },
-            {"om", Token.IF },
-            {"importera", Token.IMPORT },
-            {"skriv", Token.PRINT},
-            {"annarsom", Token.ELIF},
+        private Dictionary<string, TokenType> tokenValues = new() {
+            {"medan", TokenType.WHILE },
+            {"om", TokenType.IF },
+            {"importera", TokenType.IMPORT },
+            {"skriv", TokenType.PRINT},
+            {"annarsom", TokenType.ELIF},
 
 
     };
@@ -118,10 +124,16 @@ namespace code_translator
 
 
         }
-
-
-        public void tokenize(string text)
+        Token token(TokenType ty)
         {
+            Token t = new Token();
+            t.type = ty;
+            return t;
+        }
+
+        public List<Token> tokenize(string text)
+        {
+            List<Token> tokens = new List<Token>();
             int i = 0;
 
             while (i < text.Length)
@@ -137,19 +149,20 @@ namespace code_translator
                     //read number
                     int a;
                     (a, i) = tokenizeNumber(text, i);
-                    Console.Write(Token.NUMBER);
-                    Console.Write($" ({a}) ");
-
-
+                    Token number = new Token();
+                    number.type = TokenType.NUMBER;
+                    number.value = a;
+                    tokens.Add(number);
 
                 }
                 else if (c == '"')
                 {
                     string s;
                     (s, i) = tokenizeString(text, i);
-                    Console.Write(Token.STRING);
-                    Console.Write($" ({s}) ");
-
+                    Token str = new Token();
+                    str.type = TokenType.STRING;
+                    str.value = s;
+                    tokens.Add(str);
 
                 }
                 else if (char.IsLetter(c))
@@ -159,74 +172,80 @@ namespace code_translator
                     (s, i) = tokenizeWord(text, i);
                     if (tokenValues.ContainsKey(s))
                     {
+                        //found a keyword
                         var t = tokenValues[s];
-                        Console.Write(t);
-                        Console.Write(" ");
+                        //Console.Write(t);
+                        //Console.Write(" ");
+                        Token keyword = new Token();
+                        keyword.type = t;
+                        tokens.Add(keyword);                        
                     }
                     else
                     {
-                        Console.Write(Token.ID);
-                        Console.Write($" ({s}) ");
+                    
+                        Token id = new Token();
+                        id.type = TokenType.ID;
+                        id.value = s;
+                        tokens.Add(id);
+
                     }
                 }
                 else if (c == '(')
                 {
-                    Console.Write(Token.LPAREN);
-                    Console.Write(" ");
+                    
+                    tokens.Add(token(TokenType.LPAREN));
                     ++i;
                 }
                 else if (c == ')')
                 {
-                    Console.Write(Token.RPAREN);
-                    Console.Write(" ");
+                    tokens.Add(token(TokenType.RPAREN));
                     ++i;
                 }
                 else if (c == '{')
                 {
-                    Console.Write(Token.LCURLY);
-                    Console.Write(" ");
+                    tokens.Add(token(TokenType.LCURLY));
                     ++i;
                 }
                 else if (c == '}')
                 {
-                    Console.Write(Token.RCURLY);
-                    Console.Write(" ");
+                    tokens.Add(token(TokenType.RCURLY));
+
                     ++i;
 
                 }
                 else if (c == ',')
                 {
-                    Console.Write(Token.COMMA);
-                    Console.Write(" ");
+                    tokens.Add(token(TokenType.COMMA));
+
                     ++i;
 
                 }
                 else if (c == '=')
                 {
-                    Console.Write(Token.EQ);
-                    Console.Write(" ");
+                    tokens.Add(token(TokenType.EQ));
+
                     ++i;
 
 
                 }
                 else if (c == '<')
                 {
-                    Console.Write(Token.LT);
-                    Console.Write(" ");
+                    tokens.Add(token(TokenType.LT));
+
                     ++i;
 
                 }
                 else if (c == '>')
                 {
-                    Console.Write(Token.GT);
-                    Console.Write(" ");
+                    tokens.Add(token(TokenType.GT));
+
                     ++i;
 
                 }
                 else if (c == '.')
                 {
-                    Console.Write(Token.DOT);
-                    Console.Write(" ");
+                    tokens.Add(token(TokenType.DOT));
+
                     ++i;
 
                 }
@@ -243,6 +262,8 @@ namespace code_translator
                     ++i;
                 }
             }
+            return tokens;
+
         }
     }
 }
