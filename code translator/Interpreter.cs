@@ -22,6 +22,14 @@ namespace code_translator
                 var nright = (int)right;
                 return nleft + nright;
             }
+            else if (e.type == ExpType.DIFF)
+            {
+                var left = interpretExp(e.exp1);
+                var right = interpretExp(e.exp2);
+                var nleft = (int)left;
+                var nright = (int)right;
+                return nleft - nright;
+            }
             throw new NotImplementedException();
 
         }

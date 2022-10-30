@@ -40,6 +40,7 @@ namespace code_translator
         LT,
         IMPORT,
         PRINT,
+        MINUS,
     }
     internal class Tokenizer
     {
@@ -255,6 +256,13 @@ namespace code_translator
                 else if (c == '+')
                 {
                     tokens.Add(token(TokenType.PLUS));
+
+                    ++i;
+
+                }
+                else if (c == '-')
+                {
+                    tokens.Add(token(TokenType.MINUS));
 
                     ++i;
 

@@ -34,6 +34,15 @@ namespace code_translator
                 e.exp2 = e2;
                 return (e,i2);
 
+            } else if (b.type == TokenType.MINUS)
+            {
+                ++i1;
+                var (e2,i2) = parseExp(tokens, i1);
+                var e = new Exp();
+                e.type = ExpType.DIFF;
+                e.exp1 = e1;
+                e.exp2 = e2;
+                return (e,i2);
             }
             throw new NotImplementedException();
         }
@@ -97,6 +106,10 @@ namespace code_translator
             {
                 s += $" ({exp1} + {exp2}) ";
             }
+            else if (type == ExpType.DIFF)
+            {
+                s += $" ({exp1} - {exp2} ";
+            }
             return s.ToString();
 
         }
@@ -110,5 +123,6 @@ namespace code_translator
         EXP,
         SUM,
         PROD,
+        DIFF,
     }
 }
