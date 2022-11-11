@@ -23,7 +23,20 @@ foreach (var token in tokens)
 //test("gurka");
 //test("\"gurka\"");
 //testParser("x+3");
-testInterpreter("3-2");
+//testInterpreter("3-2");
+testInterpreter2();
+static void testInterpreter2()
+{
+    var interpreter = new Interpreter();
+    var three = new ConstantExpression(3);
+    var two = new ConstantExpression(2);
+    var five = new ConstantExpression(5);
+    var combo = new Combination(ExpType.SUM, five, two);
+    var combo2 = new Combination(ExpType.PROD, combo, three);
+    var result = interpreter.interpretExp(combo2);
+    Console.Write(result.ToString());
+
+}
 static void testParser(string program)
 {
     var p = new Parser();

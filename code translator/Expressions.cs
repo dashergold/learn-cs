@@ -13,6 +13,7 @@ namespace code_translator
         
 
     }
+
     public enum ExpType
     {
         NUMBER = 1,
@@ -23,9 +24,15 @@ namespace code_translator
         PROD,
         DIFF,
     }
+
     public class IdExpression : Exp
     {
         public string Name;
+        public IdExpression(string name)
+        {
+            Name = name;
+        }
+
         public override string ToString()
         {
           
@@ -41,6 +48,14 @@ namespace code_translator
     }
     public class Combination : Exp
     {
+        public Combination(ExpType Type, Exp Left, Exp Right)
+        {
+            this .Type = Type;
+            this.Left = Left;
+            this .Right = Right;
+
+        }
+
         public ExpType Type;
         public Exp Left;
         public Exp Right;
@@ -62,6 +77,10 @@ namespace code_translator
     }
     public class ConstantExpression : Exp
     {
+        public ConstantExpression(object Value)
+        {
+            this.Value = Value;
+        }
         public object Value;
         public override string ToString()
         {
