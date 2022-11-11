@@ -40,6 +40,7 @@ namespace code_translator
                     var nright = (int)right;
                     return nleft * nright;
                 }
+
             }
             
             throw new NotImplementedException();

@@ -42,6 +42,17 @@ namespace code_translator
     }
     public class ApplicationExpression : Exp
     {
+        public ApplicationExpression(Exp Function, List<Exp> Arguments)
+        {
+            this.Function = Function;
+            this.Arguments = Arguments;
+            
+        }
+        public override string ToString()
+        {
+            var args = string.Join(",", Arguments);
+            return $" {Function}({args}) ";
+        }
         public Exp Function;
         public List<Exp> Arguments;
 

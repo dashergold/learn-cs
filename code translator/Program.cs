@@ -24,7 +24,9 @@ foreach (var token in tokens)
 //test("\"gurka\"");
 //testParser("x+3");
 //testInterpreter("3-2");
-testInterpreter2();
+//testInterpreter2();
+testInterpreter("halt()");
+
 static void testInterpreter2()
 {
     var interpreter = new Interpreter();
