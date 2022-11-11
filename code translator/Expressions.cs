@@ -8,39 +8,9 @@ namespace code_translator
 {
     public class Exp
     {
-        public ExpType type;
-        public string idName;
-        public int number;
-        public string str;
-        public Exp exp1, exp2;
+       
 
-        public override string ToString()
-        {
-
-            string s = type.ToString();
-            if (type == ExpType.NUMBER)
-            {
-                s += $" ({number}) ";
-            }
-            else if (type == ExpType.ID)
-            {
-                s += $" ({idName}) ";
-            }
-            else if (type == ExpType.STRING)
-            {
-                s += $" ({str}) ";
-            }
-            else if (type == ExpType.SUM)
-            {
-                s += $" ({exp1} + {exp2}) ";
-            }
-            else if (type == ExpType.DIFF)
-            {
-                s += $" ({exp1} - {exp2} ";
-            }
-            return s.ToString();
-
-        }
+        
 
     }
     public enum ExpType
@@ -56,6 +26,12 @@ namespace code_translator
     public class IdExpression : Exp
     {
         public string Name;
+        public override string ToString()
+        {
+          
+         return       $" ({Name}) ";
+            
+        }
     }
     public class ApplicationExpression : Exp
     {
@@ -68,11 +44,30 @@ namespace code_translator
         public ExpType Type;
         public Exp Left;
         public Exp Right;
-
+        public override string ToString()
+        {
+            if (Type == ExpType.SUM)
+            {
+                return $" ({Left} + {Right}) ";
+            }
+            else if (Type == ExpType.DIFF)
+            {
+                return $" ({Left} - {Right} ";
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
     public class ConstantExpression : Exp
     {
         public object Value;
-
+        public override string ToString()
+        {
+            
+               return $" ({Value}) ";
+            
+        }
     }
 }

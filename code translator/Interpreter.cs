@@ -10,26 +10,30 @@ namespace code_translator
     {
         public object interpretExp(Exp e)
         {
-            if (e.type == ExpType.NUMBER)
+            if (e is ConstantExpression c)
             {
-                return (e.number);
+                return (c.Value);
             }
-            else if (e.type == ExpType.SUM)
+            else if (e is Combination combo)
             {
-                var left = interpretExp(e.exp1);
-                var right = interpretExp(e.exp2);
-                var nleft = (int)left;
-                var nright = (int)right;
-                return nleft + nright;
+                if (combo.Type == ExpType.SUM)
+                {
+                    var left = interpretExp(combo.Left);
+                    var right = interpretExp(combo.Right);
+                    var nleft = (int)left;
+                    var nright = (int)right;
+                    return nleft + nright;
+                }
+                else if (combo.Type == ExpType.DIFF)
+                {
+                    var left = interpretExp(combo.Left);
+                    var right = interpretExp(combo.Right);
+                    var nleft = (int)left;
+                    var nright = (int)right;
+                    return nleft - nright;
+                }
             }
-            else if (e.type == ExpType.DIFF)
-            {
-                var left = interpretExp(e.exp1);
-                var right = interpretExp(e.exp2);
-                var nleft = (int)left;
-                var nright = (int)right;
-                return nleft - nright;
-            }
+            
             throw new NotImplementedException();
 
         }

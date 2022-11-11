@@ -28,20 +28,20 @@ namespace code_translator
             {
                 ++i1;
                 var (e2, i2) = parseExp(tokens, i1);
-                var e = new Exp();
-                e.type = ExpType.SUM;
-                e.exp1 = e1;
-                e.exp2 = e2;
+                var e = new Combination();
+                e.Type = ExpType.SUM;
+                e.Left = e1;
+                e.Right = e2;
                 return (e,i2);
 
             } else if (b.type == TokenType.MINUS)
             {
                 ++i1;
                 var (e2,i2) = parseExp(tokens, i1);
-                var e = new Exp();
-                e.type = ExpType.DIFF;
-                e.exp1 = e1;
-                e.exp2 = e2;
+                var e = new Combination();
+                e.Type = ExpType.DIFF;
+                e.Left = e1;
+                e.Right = e2;
                 return (e,i2);
             }
             throw new NotImplementedException();
@@ -51,9 +51,8 @@ namespace code_translator
             var a = tokens[i];
             if (a.type == TokenType.NUMBER)
             {
-                var e = new Exp();
-                e.number = (int)a.value;
-                e.type = ExpType.NUMBER;
+                var e = new ConstantExpression();
+                e.Value= (int)a.value;
                 ++i;
                 return (e, i);
 
@@ -61,17 +60,15 @@ namespace code_translator
             }
             else if (a.type == TokenType.ID)
             {
-                var e = new Exp();
-                e.idName = (string)a.value;
-                e.type = ExpType.ID;
+                var e = new IdExpression();
+                e. Name= (string)a.value;
                 ++i;
                 return (e, i);
             }
             else if (a.type == TokenType.STRING)
             {
-                var e = new Exp();
-                e.str = (string)a.value;
-                e.type = ExpType.STRING;
+                var e = new ConstantExpression();
+                e.Value = (string)a.value;
                 ++i;
                 return (e, i);
             }
