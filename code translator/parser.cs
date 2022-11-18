@@ -9,6 +9,12 @@ namespace code_translator
 {
     internal class Parser
     {
+        private List<Token> tokens;
+        public Parser(List<Token> tokens)
+        {
+            this.tokens = tokens;
+        }
+
         #region expressions
         //pars expressions 
         //E:: == const |
@@ -17,10 +23,10 @@ namespace code_translator
         //  (E)
         //  E+E
         //  E*E
-        public (Exp, int i) parseExp(List<Token> tokens, int i)
+        public (Exp, int i) parseExp( int i)
         {
             
-            var (e1,i1) = parseApplication(tokens, i);
+            var (e1,i1) = parseApplication( i);
             if (i1 == tokens.Count)
             {
                 return (e1,i1);
@@ -29,20 +35,20 @@ namespace code_translator
             if (b.type == TokenType.PLUS)
             {
                 ++i1;
-                var (e2, i2) = parseApplication(tokens, i1);
+                var (e2, i2) = parseApplication( i1);
                 var e = new Combination(ExpType.SUM, e1,e2);
                 return (e,i2);
 
             } else if (b.type == TokenType.MINUS)
             {
                 ++i1;
-                var (e2,i2) = parseApplication(tokens, i1);
+                var (e2,i2) = parseApplication( i1);
                 var e = new Combination(ExpType.DIFF,e1,e2);
                 return (e,i2);
             }
             else if (b.type == TokenType.MULT) {
                 ++i1;
-                var (e2,i2) = parseApplication(tokens, i1);
+                var (e2,i2) = parseApplication( i1);
                 var e = new Combination(ExpType.PROD, e1,e2);
                 return (e, i2);
             }
@@ -52,9 +58,9 @@ namespace code_translator
             }
             throw new NotImplementedException();
         }
-        public (Exp, int i) parseApplication(List<Token> tokens, int i)
+        public (Exp, int i) parseApplication( int i)
         {
-            var (e1, i1) = parseSimpleExp(tokens, i);
+            var (e1, i1) = parseSimpleExp( i);
             if (tokens[i1].type == TokenType.LPAREN)
             {
                 ++i1;
@@ -69,7 +75,7 @@ namespace code_translator
                 
                 while (true)
                 {
-                    var (eArg1, i2) = parseExp(tokens, i1);
+                    var (eArg1, i2) = parseExp( i1);
                     args.Add(eArg1);
                     if (tokens[i1].type == TokenType.RPAREN)
                     {
@@ -96,7 +102,7 @@ namespace code_translator
         }
 
 
-        public (Exp, int i) parseSimpleExp(List<Token> tokens, int i)
+        public (Exp, int i) parseSimpleExp( int i)
         {
             var a = tokens[i];
             if (a.type == TokenType.NUMBER)
@@ -127,7 +133,7 @@ namespace code_translator
         }
         #endregion
         #region statemenets
-        public (Statement, int i) parseStatement(List<Token> tokens, int i)
+        public (Statement, int i) parseStatement( int i)
         {
             //statement ::= 
             //    'print' '(' Exp ')'
@@ -145,9 +151,9 @@ namespace code_translator
             if ((t.type == TokenType.PRINT))
             {
                 ++i;
-                var (_,i2) = ExpectToken(TokenType.LPAREN, tokens, i);
-                var (e,i3) = parseExp(tokens, i2);
-                var (_, i4) = ExpectToken(TokenType.RPAREN, tokens, i3);
+                var (_,i2) = ExpectToken(TokenType.LPAREN,  i);
+                var (e,i3) = parseExp( i2);
+                var (_, i4) = ExpectToken(TokenType.RPAREN,  i3);
                 var p = new PrintStatement(e);
                 return (p, i4);
             }
@@ -158,7 +164,7 @@ namespace code_translator
             
         }
         #endregion
-        private (Token, int i) ExpectToken(TokenType type, List<Token> tokens, int i)
+        private (Token, int i) ExpectToken(TokenType type,  int i)
         {
             if (tokens.Count <= i)
             {

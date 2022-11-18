@@ -45,18 +45,19 @@ static void testInterpreter2()
 }
 static void testParser(string program)
 {
-    var p = new Parser();
     var t = new Tokenizer();
     var tokens = t.tokenize(program);
-    var e = p.parseExp(tokens, 0);
+    var p = new Parser(tokens);
+    var e = p.parseExp(0);
     Console.WriteLine(e.ToString());
 }
 static void testInterpreter(string program)
 {
-    var p = new Parser();
+   
     var t = new Tokenizer();
     var tokens = t.tokenize(program);
-    var e = p.parseExp(tokens, 0);
+    var p = new Parser(tokens);
+    var e = p.parseExp(0);
     var i = new Interpreter(new Context(null));
     var result = i.interpretExp(e.Item1);
     Console.Write(result.ToString());
@@ -64,18 +65,20 @@ static void testInterpreter(string program)
 }
 static void testParseStatement(string program)
 {
-    var p = new Parser();
+   
     var t = new Tokenizer();
     var tokens = t.tokenize(program);
-    var s = p.parseStatement(tokens, 0);
+    var p = new Parser(tokens);
+    var s = p.parseStatement( 0);
     Console.WriteLine(s.ToString());
 }
 static void testParseAndInterpret(string program)
 {
-    var p = new Parser();
+    
     var t = new Tokenizer();
     var tokens = t.tokenize(program);
-    var s = p.parseStatement(tokens, 0);
+    var p = new Parser(tokens);
+    var s = p.parseStatement(0);
     var i = new Interpreter(new Context(null));
     var result = i.intepretStatement(s.Item1);
     
