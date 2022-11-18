@@ -40,4 +40,16 @@ namespace code_translator
     {
         public List<Statement> Statements;
     }
+    public class PrintStatement : Statement
+    {
+        public Exp Exp;
+        public PrintStatement(Exp exp)
+        {
+            Exp = exp;
+        }
+        public override string ToString()
+        {
+            return $"print {Exp}\r\n";
+        }
+    }
 }

@@ -41,6 +41,7 @@ namespace code_translator
         IMPORT,
         PRINT,
         MINUS,
+        MULT,
     }
     internal class Tokenizer
     {
@@ -266,6 +267,11 @@ namespace code_translator
 
                     ++i;
 
+                }
+                else if (c == '*')
+                {
+                    tokens.Add(token(TokenType.MULT));
+                    ++i;
                 }
                 else if (char.IsWhiteSpace(c))
                 {

@@ -8,6 +8,7 @@ namespace code_translator
 {
     internal class Interpreter
     {
+        private Context context;
         public object interpretExp(Exp e)
         {
             if (e is ConstantExpression c)
@@ -45,11 +46,33 @@ namespace code_translator
             }
             else if (e is ApplicationExpression a)
             {
-                
                 throw new NotImplementedException();
+
             }
-           
+
+            throw new NotImplementedException();
 
         }
+
+        internal object intepretStatement(Statement stm)
+        {
+            if (stm is PrintStatement p)
+            {
+                var value = interpretExp(p.Exp);
+                Console.WriteLine(value);
+                return null;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            
+        }
+
+        public Interpreter(Context globals)
+        {
+            this.context = globals;
+        }
     }
+
 }

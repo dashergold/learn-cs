@@ -9,6 +9,7 @@ namespace code_translator
 {
     internal class Parser
     {
+        #region expressions
         //pars expressions 
         //E:: == const |
         //  id |
@@ -38,6 +39,16 @@ namespace code_translator
                 var (e2,i2) = parseApplication(tokens, i1);
                 var e = new Combination(ExpType.DIFF,e1,e2);
                 return (e,i2);
+            }
+            else if (b.type == TokenType.MULT) {
+                ++i1;
+                var (e2,i2) = parseApplication(tokens, i1);
+                var e = new Combination(ExpType.PROD, e1,e2);
+                return (e, i2);
+            }
+            else if (b.type == TokenType.RPAREN)
+            {
+                return (e1, i1);
             }
             throw new NotImplementedException();
         }
@@ -81,14 +92,9 @@ namespace code_translator
                 
 
             }
-            throw new NotImplementedException();
+            return (e1, i1);
         }
 
-        private void reportError(string v)
-        {
-            Console.WriteLine(v);
-            throw new ApplicationException(v);
-        }
 
         public (Exp, int i) parseSimpleExp(List<Token> tokens, int i)
         {
@@ -119,7 +125,62 @@ namespace code_translator
             }
             return (null, i);
         }
+        #endregion
+        #region statemenets
+        public (Statement, int i) parseStatement(List<Token> tokens, int i)
+        {
+            //statement ::= 
+            //    'print' '(' Exp ')'
+            //    'if' Exp '{' CompoundStatement '}'
+            //    'if' Exp '{' CompoundStatement '}' 'else' '{' CompoundStatement '}'
+            //    'while' Exp '{' Compound statement '}'
+            
+
+
+            if (tokens.Count <= i)
+            {
+                return (null, i);
+            }
+            var t = tokens[i];
+            if ((t.type == TokenType.PRINT))
+            {
+                ++i;
+                var (_,i2) = ExpectToken(TokenType.LPAREN, tokens, i);
+                var (e,i3) = parseExp(tokens, i2);
+                var (_, i4) = ExpectToken(TokenType.RPAREN, tokens, i3);
+                var p = new PrintStatement(e);
+                return (p, i4);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            
+        }
+        #endregion
+        private (Token, int i) ExpectToken(TokenType type, List<Token> tokens, int i)
+        {
+            if (tokens.Count <= i)
+            {
+                reportError($"expected {type}");
+            }
+            var t = tokens[i];
+            ++i;
+            if ((t.type != type))
+            {
+                reportError($"expected {type}, but found {t.type}");
+               
+            }
+
+            return (t, i);
+        }
+
+        private void reportError(string v)
+        {
+            Console.WriteLine(v);
+            throw new ApplicationException(v);
+        }
 
     }
-    
+
 }

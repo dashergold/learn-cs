@@ -25,11 +25,15 @@ foreach (var token in tokens)
 //testParser("x+3");
 //testInterpreter("3-2");
 //testInterpreter2();
-testInterpreter("halt()");
+//testInterpreter("halt()");
+//testParseAndInterpret("skriv(1+2)");
+testParseAndInterpret("skriv(3*4)");
+testParseAndInterpret("skriv(2-1)");
+
 
 static void testInterpreter2()
 {
-    var interpreter = new Interpreter();
+    var interpreter = new Interpreter(new Context(null));
     var three = new ConstantExpression(3);
     var two = new ConstantExpression(2);
     var five = new ConstantExpression(5);
@@ -53,11 +57,30 @@ static void testInterpreter(string program)
     var t = new Tokenizer();
     var tokens = t.tokenize(program);
     var e = p.parseExp(tokens, 0);
-    var i = new Interpreter();
+    var i = new Interpreter(new Context(null));
     var result = i.interpretExp(e.Item1);
     Console.Write(result.ToString());
     
 }
+static void testParseStatement(string program)
+{
+    var p = new Parser();
+    var t = new Tokenizer();
+    var tokens = t.tokenize(program);
+    var s = p.parseStatement(tokens, 0);
+    Console.WriteLine(s.ToString());
+}
+static void testParseAndInterpret(string program)
+{
+    var p = new Parser();
+    var t = new Tokenizer();
+    var tokens = t.tokenize(program);
+    var s = p.parseStatement(tokens, 0);
+    var i = new Interpreter(new Context(null));
+    var result = i.intepretStatement(s.Item1);
+    
+}
+
 
 
 
