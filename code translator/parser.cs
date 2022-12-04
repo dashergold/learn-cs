@@ -60,7 +60,18 @@ namespace code_translator
             {
                 return (e1, i1);
             }
-            throw new NotImplementedException();
+            else if (b.type == TokenType.LT)
+            {
+                ++i1;
+                var (e2,i2)= parseApplication( i1);
+                var e = new Combination(ExpType.LESSTHAN, e1, e2);
+                return (e, i2);
+            }
+            else if (b.type == TokenType.RCURLY)
+            {
+                return (e1, i1);
+            }
+            throw new NotImplementedException($"Dont understand token {b.type}");
         }
         public (Exp, int i) parseApplication( int i)
         {
@@ -174,12 +185,45 @@ namespace code_translator
                 return (a, i3);
 
             }
+            else if ((t.type == TokenType.IF))
+            {
+                ++i;
+                var (condition, i1) = parseExp(i);
+                var (_, i2) = ExpectToken(TokenType.LCURLY, i1);
+                var (cs, i3) = parseCompoundStatement(i2);
+                var (_, i4) = ExpectToken(TokenType.RCURLY,i3);
+                var ifstm = new IfStatement(condition, cs);
+
+                return (ifstm, i4);
+            }
             else
             {
                 throw new NotImplementedException();
             }
             
         }
+
+        private (CompoundStatement, int) parseCompoundStatement(int i)
+        {
+            var statements = new List<Statement>();
+            while (i != tokens.Count)
+            {
+                if (  tokens[i].type == TokenType.RCURLY)
+                {
+                    
+                    break;
+                }
+            
+                var (s, i1) = parseStatement(i);
+                statements.Add(s);
+                i = i1;
+
+            }
+            var cs = new CompoundStatement(statements);
+            return (cs, i);
+
+        }
+
         #endregion
         private (Token, int i) ExpectToken(TokenType type,  int i)
         {

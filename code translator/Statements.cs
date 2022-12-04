@@ -26,7 +26,12 @@ namespace code_translator
         public Exp Condition;
         public Statement Then;
         public Statement Else;
-
+        public IfStatement(Exp condition, Statement then, Statement @else = null)
+        {
+            Condition = condition;
+            Then = then;
+            Else = @else;
+        }
     }
     public class WhileStatement:Statement
     {
@@ -45,6 +50,10 @@ namespace code_translator
     public class CompoundStatement:Statement
     {
         public List<Statement> Statements;
+        public CompoundStatement(List<Statement> statements)
+        {
+            Statements = statements;
+        }
     }
     public class PrintStatement : Statement
     {

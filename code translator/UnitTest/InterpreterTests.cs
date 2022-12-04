@@ -10,6 +10,19 @@ namespace UnitTest
 {
     public class InterpreterTests
     {
+        private Context interpretProgram(string program)
+        {
+            
+            var t = new Tokenizer();
+            var tokens = t.tokenize(program);
+            var p = new Parser(tokens);
+            var s = p.parseStatement(0);
+            var c = new Context(null);
+            var i = new Interpreter(c);
+            var result = i.interpretStatement(s.Item1);
+            return c;
+        }
+
         [Test]
         public void testInterpreter()
         {
@@ -54,13 +67,7 @@ namespace UnitTest
         public void testAssignment()
         {
             var program = "x = 4";
-            var t = new Tokenizer();
-            var tokens = t.tokenize(program);
-            var p = new Parser(tokens);
-            var s = p.parseStatement(0);
-            var c = new Context(null);
-            var i = new Interpreter(c);
-            var result = i.interpretStatement(s.Item1);
+            var c = interpretProgram(program);
             var (found, value) = c.LookUp("x");
             Assert.That(found, Is.True);
             Assert.That(value, Is.EqualTo(4));
@@ -71,9 +78,12 @@ namespace UnitTest
         {
             var program =
             @"om 3 < 4{
-                skriv(""mindre"")
+                x=""mindre""
             }";
-
+            var c = interpretProgram(program);
+            var (found, value) = c.LookUp("x");
+            Assert.That(found, Is.True);
+            Assert.That(value, Is.EqualTo("mindre"));
             
         }
 

@@ -41,6 +41,14 @@ namespace code_translator
                     var nright = (int)right;
                     return nleft * nright;
                 }
+                else if (combo.Type == ExpType.LESSTHAN)
+                {
+                    var left = interpretExp(combo.Left);
+                    var right = interpretExp(combo.Right);
+                    var nleft = (int)left;
+                    var nright = (int)right;
+                    return nleft < nright;
+                }
                 
 
             }
@@ -50,7 +58,7 @@ namespace code_translator
 
             }
 
-            throw new NotImplementedException();
+            throw new NotImplementedException($"dont know how to interpret {e}");
 
         }
 
@@ -69,11 +77,61 @@ namespace code_translator
                 this.context.SetValue(id.Name, value);
                 return value;
             }
+            else if (stm is CompoundStatement cs)
+            {
+                object value = null;
+
+                foreach (var s in cs.Statements)
+                {
+                    value = interpretStatement(s);
+
+                }
+                return value;
+            }
+            else if  (stm is IfStatement ifstm)
+            {
+                var condition = interpretExp(ifstm.Condition);
+                bool condition2 = InterpretAsBool(condition);
+                if (condition2)
+                {
+                    return interpretStatement(ifstm.Then);
+                }
+                else
+                {
+                    throw new NotImplementedException("else not implemented");
+                }
+
+            }
             else
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException($"dont know how to interpret {stm}");
             }
             
+        }
+
+        private bool InterpretAsBool(object condition)
+        {
+            if (condition is null)
+            {
+                return false;
+
+            }
+            else if (condition is Boolean b)
+            {
+                return b;
+            }
+            else if (condition is int i)
+            {
+                return i != 0;
+            }
+            else if (condition is string s)
+            {
+                return s.Length != 0;
+            }
+            else
+            {
+                throw new NotImplementedException($"dont know how to convert {condition} to bool");
+            }
         }
 
         public Interpreter(Context globals)

@@ -23,6 +23,7 @@ namespace code_translator
         SUM,
         PROD,
         DIFF,
+        LESSTHAN,
     }
 
     public class IdExpression : Exp
@@ -80,9 +81,13 @@ namespace code_translator
             {
                 return $" ({Left} - {Right} ";
             }
+            else if (Type == ExpType.LESSTHAN)
+            {
+                return $" ({Left} < {Right} ";
+            }
             else
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException($"unimplemented combination {Type}");
             }
         }
     }
