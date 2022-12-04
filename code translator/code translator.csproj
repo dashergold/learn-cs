@@ -10,8 +10,11 @@
 
   <ItemGroup>
     <Compile Remove="codeTranslateMain\**" />
+    <Compile Remove="UnitTest\**" />
     <EmbeddedResource Remove="codeTranslateMain\**" />
+    <EmbeddedResource Remove="UnitTest\**" />
     <None Remove="codeTranslateMain\**" />
+    <None Remove="UnitTest\**" />
   </ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace code_translator
 {
-    internal class Interpreter
+    public class Interpreter
     {
         private Context context;
         public object interpretExp(Exp e)
@@ -54,7 +54,7 @@ namespace code_translator
 
         }
 
-        internal object intepretStatement(Statement stm)
+        public object intepretStatement(Statement stm)
         {
             if (stm is PrintStatement p)
             {

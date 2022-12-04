@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace code_translator
 {
-    internal class Parser
+    public class Parser
     {
         private List<Token> tokens;
         public Parser(List<Token> tokens)
@@ -61,6 +61,10 @@ namespace code_translator
         public (Exp, int i) parseApplication( int i)
         {
             var (e1, i1) = parseSimpleExp( i);
+            if (i1 == tokens.Count)
+            {
+                return (e1, i1);
+            }
             if (tokens[i1].type == TokenType.LPAREN)
             {
                 ++i1;

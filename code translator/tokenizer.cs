@@ -43,7 +43,7 @@ namespace code_translator
         MINUS,
         MULT,
     }
-    internal class Tokenizer
+    public class Tokenizer
     {
        
         
