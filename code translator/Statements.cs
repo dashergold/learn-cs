@@ -13,6 +13,12 @@ namespace code_translator
     public class Assign : Statement{
         public Exp Left;
         public Exp Right;
+        public Assign (Exp left, Exp right)
+        {
+            Left = left;
+            Right = right;
+
+        }
 
     }
     public class IfStatement:Statement

@@ -24,7 +24,7 @@ namespace code_translator
             this.localItems = new Dictionary<string, object>();
 
         }
-        public void Define(string name, object value)
+        public void SetValue(string name, object value)
         {
             localItems[name] = value;
 

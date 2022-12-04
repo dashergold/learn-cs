@@ -56,6 +56,10 @@ namespace code_translator
             {
                 return (e1, i1);
             }
+            else if (b.type == TokenType.EQ)
+            {
+                return (e1, i1);
+            }
             throw new NotImplementedException();
         }
         public (Exp, int i) parseApplication( int i)
@@ -160,6 +164,15 @@ namespace code_translator
                 var (_, i4) = ExpectToken(TokenType.RPAREN,  i3);
                 var p = new PrintStatement(e);
                 return (p, i4);
+            }
+            else if ((t.type == TokenType.ID))
+            {
+                var (left, i1) = parseExp(i);
+                var (_,i2) = ExpectToken(TokenType.EQ, i1);
+                var (right, i3) = parseExp(i2);
+                var a = new Assign(left, right);
+                return (a, i3);
+
             }
             else
             {

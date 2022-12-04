@@ -1,4 +1,5 @@
 ﻿using code_translator;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,8 +46,35 @@ namespace UnitTest
             var p = new Parser(tokens);
             var s = p.parseStatement(0);
             var i = new Interpreter(new Context(null));
-            var result = i.intepretStatement(s.Item1);
+            var result = i.interpretStatement(s.Item1);
             Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public void testAssignment()
+        {
+            var program = "x = 4";
+            var t = new Tokenizer();
+            var tokens = t.tokenize(program);
+            var p = new Parser(tokens);
+            var s = p.parseStatement(0);
+            var c = new Context(null);
+            var i = new Interpreter(c);
+            var result = i.interpretStatement(s.Item1);
+            var (found, value) = c.LookUp("x");
+            Assert.That(found, Is.True);
+            Assert.That(value, Is.EqualTo(4));
+
+        }
+        [Test]
+        public void interpretIfStatement()
+        {
+            var program =
+            @"om 3 < 4{
+                skriv(""mindre"")
+            }";
+
+            
         }
 
 

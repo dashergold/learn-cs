@@ -54,13 +54,20 @@ namespace code_translator
 
         }
 
-        public object intepretStatement(Statement stm)
+        public object interpretStatement(Statement stm)
         {
             if (stm is PrintStatement p)
             {
                 var value = interpretExp(p.Exp);
                 Console.WriteLine(value);
                 return null;
+            }
+            else if (stm is Assign a)
+            {
+                var value = interpretExp(a.Right);
+                var id = (IdExpression)a.Left;
+                this.context.SetValue(id.Name, value);
+                return value;
             }
             else
             {
