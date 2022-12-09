@@ -15,6 +15,16 @@ namespace code_translator
             {
                 return (c.Value);
             }
+            else if (e is IdExpression id)
+            {
+                var (found, value )= context.LookUp(id.Name);
+                if (!found)
+                {
+                    throw new ApplicationException($"the variable {id.Name} has no value");
+
+                } 
+                return (value);
+            }
             else if (e is Combination combo)
             {
                 if (combo.Type == ExpType.SUM)
@@ -101,6 +111,18 @@ namespace code_translator
                     throw new NotImplementedException("else not implemented");
                 }
 
+            }
+            else if (stm is WhileStatement wstm)
+            {
+                var condition = interpretExp(wstm.Condition);
+                bool condition2 = InterpretAsBool(condition);
+                while (condition2)
+                {
+                     interpretStatement(wstm.Body);
+                     condition = interpretExp(wstm.Condition);
+                     condition2 = InterpretAsBool(condition);
+                }
+                return null;
             }
             else
             {

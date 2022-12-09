@@ -16,7 +16,7 @@ namespace UnitTest
             var t = new Tokenizer();
             var tokens = t.tokenize(program);
             var p = new Parser(tokens);
-            var s = p.parseStatement(0);
+            var s = p.parseProgram();
             var c = new Context(null);
             var i = new Interpreter(c);
             var result = i.interpretStatement(s.Item1);
@@ -86,7 +86,33 @@ namespace UnitTest
             Assert.That(value, Is.EqualTo("mindre"));
             
         }
+        [Test]
+        public void interpretWhileStatement()
+        {
+            var program =
+            @"x = 0
+            medan x < 2 {
+               skriv(""hej"")
+                x = x+1
+            }";
+            var c = interpretProgram(program);
+            var(found, value) = c.LookUp("x");
+            Assert.That(found, Is.True);
+            Assert.That(value, Is.EqualTo(2));
 
+
+        }
+
+        [Test]
+        [Ignore("to do")]
+        public void interpretNot()
+        {
+            var program = "x = inte(4>3)";
+            var c = interpretProgram(program);
+            var (found, value) = c.LookUp("x");
+            Assert.That(found, Is.True);
+            Assert.That(value, Is.EqualTo(false));
+        }
 
     }
 }

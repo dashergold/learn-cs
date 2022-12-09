@@ -15,6 +15,20 @@ namespace code_translator
             this.tokens = tokens;
         }
 
+        public (Statement, int i) parseProgram()
+        {
+            int i = 0;
+            var statements = new List<Statement>();
+            while (i < tokens.Count)
+            {
+                var (statement, i1) = parseStatement(i);
+                statements.Add(statement);
+                i = i1;
+
+            }
+            return (new CompoundStatement(statements),i);
+        }
+
         #region expressions
         //pars expressions 
         //E:: == const |
@@ -67,7 +81,8 @@ namespace code_translator
                 var e = new Combination(ExpType.LESSTHAN, e1, e2);
                 return (e, i2);
             }
-            else if (b.type == TokenType.RCURLY)
+            else if (b.type == TokenType.RCURLY ||
+                     b.type == TokenType.WHILE)
             {
                 return (e1, i1);
             }
@@ -159,6 +174,8 @@ namespace code_translator
             //    'if' Exp '{' CompoundStatement '}'
             //    'if' Exp '{' CompoundStatement '}' 'else' '{' CompoundStatement '}'
             //    'while' Exp '{' Compound statement '}'
+            //    'def' String '(' Exp,* ')' '{' CompoundStatement '}'
+            //    'return' Exp*
             
 
 
@@ -195,6 +212,17 @@ namespace code_translator
                 var ifstm = new IfStatement(condition, cs);
 
                 return (ifstm, i4);
+            }
+            else if ((t.type == TokenType.WHILE))
+            {
+                ++i;
+                var (condition, i1) = parseExp(i);
+                var (_, i2) = ExpectToken(TokenType.LCURLY, i1);
+                var (cs, i3) = parseCompoundStatement(i2);
+                var (_, i4) = ExpectToken(TokenType.RCURLY, i3);
+                var wstm = new WhileStatement(condition, cs);
+
+                return (wstm, i4);
             }
             else
             {
