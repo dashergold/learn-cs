@@ -4,7 +4,9 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>code_translator</RootNamespace>
-    <ImplicitUsings>enable</ImplicitUsings>
+	  <AssemblyName>axol</AssemblyName>
+
+	  <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
