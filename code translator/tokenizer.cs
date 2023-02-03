@@ -49,7 +49,7 @@ namespace code_translator
         
 
         //swedish keywords (will be moved)
-        private Dictionary<string, TokenType> tokenValues = new() {
+        private Dictionary<string, TokenType> swedishTokenValues = new() {
             {"medan", TokenType.WHILE },
             {"om", TokenType.IF },
             {"importera", TokenType.IMPORT },
@@ -58,7 +58,18 @@ namespace code_translator
 
 
     };
+        private Dictionary<string, TokenType> tokenValues;
 
+
+        public Tokenizer()
+        {
+            this.tokenValues = swedishTokenValues;
+        }
+
+        public Tokenizer(Dictionary<string, TokenType> tokenvalues)
+        {
+            this.tokenValues = tokenvalues;
+        }
 
         int discardComment(string text, int i)
         {
