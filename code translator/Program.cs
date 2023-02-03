@@ -6,55 +6,37 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        Console.WriteLine(args.Length);
-        foreach (string arg in args)
+        var o = new Options(args);
+        if (o.Language == null)
         {
-            Console.WriteLine(arg);
+            o.Language = "en";
+
         }
 
-        //var a = File.OpenText(@"D:\code\cs\code translator\index.txt");
-        //var n = readNumber(a);
+        var dict = loadLanguage(o.Language);
+        var program = File.ReadAllText(o.FileName);
+        var t = new Tokenizer(dict);
+        var tokens = t.tokenize(program);
+        var p = new Parser(tokens);
+        var s = p.parseProgram();
+        var c = new Context(null);
+        var i = new Interpreter(c);
+        i.interpretStatement(s.Item1);
+        
 
-        var a = File.ReadAllText(@"D:\code\python\Translate code python\translations\job.axol");
-        var t = new Tokenizer();
-        var tokens = t.tokenize(a);
-        foreach (var token in tokens)
-        {
-            Console.Write(token.type);
-            Console.Write(" ");
-            if (token.value != null)
-            {
-
-                Console.Write($" ({token.value}) ");
-            }
-        }
-
-        ////test("3");
-        //test("gurka");
-        //test("\"gurka\"");
-        //testParser("x+3");
-        //testInterpreter();
-        //testInterpreter2();
-        //testInterpreter("halt()");
-        //testParseAndInterpret("skriv(1+2)");
-        //testParseAndInterpret("skriv(3*4)");
-        //testParseAndInterpret("skriv(2-1)");
-
-
-
-
-
-
-
-
-        ////while (n != null)
-        //{
-        //    Console.WriteLine(n);
-        //    n = readNumber(a);
-
-        //}
 
     }
 
+    private static Dictionary<string,TokenType> loadLanguage(string language)
+    {
+        var appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        var languageFileName = Path.Combine(appDataFolder, "axol",$"{language}.txt");
+        var rdr = File.OpenText(languageFileName);
+        var tfr = new TokenFileReader(rdr);
+        var result = tfr.Dictionary;
+        rdr.Close();
+        return result;
+
+    }
 }
 
