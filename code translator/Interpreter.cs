@@ -64,9 +64,29 @@ namespace code_translator
             }
             else if (e is ApplicationExpression a)
             {
-                throw new NotImplementedException();
-
+                //to do: evaluate arguments
+                if (a.Function is not IdExpression fnname)
+                {
+                    throw new NotImplementedException($"dont know how to interpret {e}");
+                }
+                var (found, definition) = this.context.LookUp(fnname.Name);
+                if (!found)
+                {
+                    throw new InvalidOperationException($"unknown function {fnname.Name}");
+                }
+                if (definition is not DefStatement def)
+                {
+                    throw new InvalidOperationException($"{fnname.Name} is not a function");
+                }
+                var fncontext = new Context(this.context);
+                var oldContext = this.context;
+                this.context = fncontext;
+                var reply = interpretStatement(def.Body);
+                this.context = oldContext;
+                return reply;
             }
+            
+            
 
             throw new NotImplementedException($"dont know how to interpret {e}");
 
@@ -128,6 +148,11 @@ namespace code_translator
             {
                 this.context.SetValue(dstm.ID, dstm);
                 return null;
+            }
+            else if (stm is ReturnStatement rstm)
+            {
+                var answer = interpretExp(rstm.ReturnValue);
+                return answer;
             }
             else
             {

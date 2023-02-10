@@ -126,6 +126,16 @@ namespace UnitTest
         [Test]
         public void interpretParameterlessCall()
         {
+            var program =
+@"definera y() {
+svara 3+1
+}
+x = y()
+";
+            var c = interpretProgram(program);
+            var (found, value) = c.LookUp("x");
+            Assert.That(found, Is.True);
+            Assert.That(value, Is.EqualTo(4));
 
         }
     }
