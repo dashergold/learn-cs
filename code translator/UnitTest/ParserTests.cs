@@ -44,7 +44,7 @@ namespace UnitTest
             var p = new Parser(tokens);
             var s = p.parseStatement();
             Console.Write(s.ToString());
-            
+
             var expected =
 @"while  ( (x)  <  (2)   {
     print(""hej"")
@@ -95,6 +95,26 @@ svara ""hej""
             Assert.That(s.ToString(), Is.EqualTo(expected));
 
 
+        }
+        [Test]
+        [Ignore("get this to work")]
+        public void parseReturnAfterAssigment()
+        {
+            var program =
+@" {
+x = 3
+svara x+1
+}
+";
+            var t = new Tokenizer();
+            var tokens = t.tokenize(program);
+            var p = new Parser(tokens);
+            var s = p.parseStatement();
+            Console.Write(s.ToString());
+            var expected =
+@"sdkfsd ""hej""
+";
+            Assert.That(s.ToString(), Is.EqualTo(expected));
         }
     }
 }

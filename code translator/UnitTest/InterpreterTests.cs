@@ -138,5 +138,23 @@ x = y()
             Assert.That(value, Is.EqualTo(4));
 
         }
+
+        [Test]
+        [Ignore("get this to work")]
+        public void interpretWithMath()
+        {
+            var program =
+@"definera y() {
+x = 3
+svara x+1
+}
+x = y()
+";
+            var c = interpretProgram(program);
+            var (found, value) = c.LookUp("x");
+            Assert.That(found, Is.True);
+            Assert.That(value, Is.EqualTo(4));
+
+        }
     }
 }
