@@ -244,6 +244,15 @@ namespace code_translator
                 return dstm;
 
             }
+            else if (t.type == TokenType.RETURN)
+            {
+                ++this.position;
+                var returnValue = parseExp();
+                var rstm = new ReturnStatement(returnValue);
+                return rstm;
+
+
+            }
             else
             {
                 throw new NotImplementedException($"dont know how to parse {t.type}");

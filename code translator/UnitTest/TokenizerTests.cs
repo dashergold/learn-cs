@@ -8,6 +8,12 @@ namespace UnitTest
                 { "define",TokenType.DEFINE }
         };
 
+        Dictionary<string, TokenType> svDict = new() {
+                { "om",TokenType.IF },
+                { "definera",TokenType.DEFINE },
+                { "svara", TokenType.RETURN }
+        };
+
         [SetUp]
         public void Setup()
         {
@@ -28,6 +34,7 @@ namespace UnitTest
 
 
         }
+
         [Test]
         public void TokenizeDefine()
         {
@@ -37,6 +44,17 @@ namespace UnitTest
             Assert.That(tokens[0].type, Is.EqualTo(TokenType.DEFINE));
 
         }
-    
+
+        [Test]
+        public void TokenizeReturn()
+        {
+            var tokenizer = new Tokenizer(svDict);
+            var tokens = tokenizer.tokenize("svara");
+            Assert.That(tokens.Count, Is.EqualTo(1));
+            Assert.That(tokens[0].type, Is.EqualTo(TokenType.RETURN));
+
+        }
+
+
     }
 }

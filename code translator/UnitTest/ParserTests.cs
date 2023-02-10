@@ -76,5 +76,25 @@ namespace UnitTest
 ";
             Assert.That(s.ToString(), Is.EqualTo(expected));
         }
+
+        [Test]
+        public void parseReturn()
+        {
+            var program =
+@"
+svara ""hej""
+";
+            var t = new Tokenizer();
+            var tokens = t.tokenize(program);
+            var p = new Parser(tokens);
+            var s = p.parseStatement();
+            Console.Write(s.ToString());
+            var expected =
+@"return ""hej""
+";
+            Assert.That(s.ToString(), Is.EqualTo(expected));
+
+
+        }
     }
 }

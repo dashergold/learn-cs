@@ -89,11 +89,27 @@ namespace code_translator
         public Exp Exp;
         public PrintStatement(Exp exp)
         {
-            Exp = exp;
+            this.Exp = exp;
         }
         public override string ToString()
         {
             return $"print({Exp})\r\n";
         }
+    }
+    public class ReturnStatement : Statement
+    {
+        public Exp ReturnValue;
+
+        public ReturnStatement(Exp returnValue)
+        {
+            this.ReturnValue = returnValue;
+        }
+
+        public override string ToString()
+        {
+            return $"return {ReturnValue}\r\n";
+
+        }
+
     }
 }

@@ -113,6 +113,11 @@ namespace UnitTest
             Assert.That(found, Is.True);
             Assert.That(value, Is.EqualTo(false));
         }
+        [Test]
+        public void interpretFunction()
+        {
+
+        }
 
     }
 }

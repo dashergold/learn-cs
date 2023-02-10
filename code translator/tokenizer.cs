@@ -57,6 +57,7 @@ namespace code_translator
             {"skriv", TokenType.PRINT},
             {"annarsom", TokenType.ELIF},
             {"definera", TokenType.DEFINE},
+            {"svara", TokenType.RETURN }
 
 
     };
