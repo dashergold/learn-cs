@@ -16,8 +16,8 @@ namespace UnitTest
             var t = new Tokenizer();
             var tokens = t.tokenize(program);
             var p = new Parser(tokens);
-            var e = p.parseExp(0);
-            Assert.AreEqual("( ( (x)  +  (3) ) , 3)", e.ToString());
+            var e = p.parseExp();
+            Assert.AreEqual(" ( (x)  +  (3) ) ", e.ToString());
         }
         [Test]
         public void testParseStatement()
@@ -26,9 +26,9 @@ namespace UnitTest
             var t = new Tokenizer();
             var tokens = t.tokenize(program);
             var p = new Parser(tokens);
-            var s = p.parseStatement(0);
-            Console.Write(s.Item1.ToString());
-            Assert.AreEqual("print  (hej) \r\n", s.Item1.ToString());
+            var s = p.parseStatement();
+            Console.Write(s.ToString());
+            Assert.AreEqual("print(\"hej\")\r\n", s.ToString());
         }
         [Test]
         public void parseWhileStatement()
@@ -37,19 +37,44 @@ namespace UnitTest
             @"
             medan x < 2 {
                skriv(""hej"")
-                x = x+1
+               x = x+1
             }";
             var t = new Tokenizer();
             var tokens = t.tokenize(program);
             var p = new Parser(tokens);
-            var s = p.parseStatement(0);
-            Console.Write(s.Item1.ToString());
+            var s = p.parseStatement();
+            Console.Write(s.ToString());
+            
             var expected =
 @"while  ( (x)  <  (2)   {
-    code_translator.CompoundStatement
+    print(""hej"")
+ (x)  =  ( (x)  +  (1) ) 
+
 }
 ";
-            Assert.That(s.Item1.ToString(), Is.EqualTo(expected));
+
+            Assert.That(s.ToString(), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void parseFunctionDefinition()
+        {
+            var program =
+@"definera x (){
+    skriv(""hej"")
+}
+";
+            var t = new Tokenizer();
+            var tokens = t.tokenize(program);
+            var p = new Parser(tokens);
+            var s = p.parseStatement();
+            Console.Write(s.ToString());
+            var expected =
+@"define x () {
+    print(""hej"")
+}
+";
+            Assert.That(s.ToString(), Is.EqualTo(expected));
         }
     }
 }

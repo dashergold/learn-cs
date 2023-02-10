@@ -3,6 +3,11 @@ namespace UnitTest
 {
     public class TokenizerTests
     {
+        Dictionary<string, TokenType> enDict = new () {
+                { "if",TokenType.IF },
+                { "define",TokenType.DEFINE }
+        };
+
         [SetUp]
         public void Setup()
         {
@@ -21,6 +26,15 @@ namespace UnitTest
             Assert.That(tokens.Count, Is.EqualTo(1));
             Assert.That(tokens[0].type, Is.EqualTo(TokenType.IF));
 
+
+        }
+        [Test]
+        public void TokenizeDefine()
+        {
+            var tokenizer = new Tokenizer(enDict);
+            var tokens = tokenizer.tokenize("define");
+            Assert.That(tokens.Count, Is.EqualTo(1));
+            Assert.That(tokens[0].type, Is.EqualTo(TokenType.DEFINE));
 
         }
     

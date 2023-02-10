@@ -59,7 +59,18 @@ namespace code_translator
         public List<Exp> Parameters;
         public Statement Body;
 
+        public DefStatement(String functionName, List<Exp> parameters, CompoundStatement cs)
+        {
 
+            this.Parameters = parameters;
+            this.Body = cs;
+            this.ID = functionName;
+
+        }
+        public override string ToString()
+        {
+            return $"define {this.ID} () {{\r\n    {Body}}}\r\n";
+        }
     }
     public class CompoundStatement:Statement
     {
@@ -67,6 +78,10 @@ namespace code_translator
         public CompoundStatement(List<Statement> statements)
         {
             Statements = statements;
+        }
+        public override string ToString()
+        {
+            return String.Join("",Statements);
         }
     }
     public class PrintStatement : Statement
@@ -78,7 +93,7 @@ namespace code_translator
         }
         public override string ToString()
         {
-            return $"print {Exp}\r\n";
+            return $"print({Exp})\r\n";
         }
     }
 }

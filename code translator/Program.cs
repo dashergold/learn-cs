@@ -21,7 +21,7 @@ public class Program
         var s = p.parseProgram();
         var c = new Context(null);
         var i = new Interpreter(c);
-        i.interpretStatement(s.Item1);
+        i.interpretStatement(s);
         
 
 

@@ -100,6 +100,11 @@ namespace code_translator
         public object Value;
         public override string ToString()
         {
+             if (Value is string)
+            {
+                return $"\"{Value}\"";
+
+            }
             
                return $" ({Value}) ";
             

@@ -42,6 +42,7 @@ namespace code_translator
         PRINT,
         MINUS,
         MULT,
+        DEFINE,
     }
     public class Tokenizer
     {
@@ -55,6 +56,7 @@ namespace code_translator
             {"importera", TokenType.IMPORT },
             {"skriv", TokenType.PRINT},
             {"annarsom", TokenType.ELIF},
+            {"definera", TokenType.DEFINE},
 
 
     };

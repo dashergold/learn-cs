@@ -19,7 +19,7 @@ namespace UnitTest
             var s = p.parseProgram();
             var c = new Context(null);
             var i = new Interpreter(c);
-            var result = i.interpretStatement(s.Item1);
+            var result = i.interpretStatement(s);
             return c;
         }
 
@@ -30,9 +30,9 @@ namespace UnitTest
             var t = new Tokenizer();
             var tokens = t.tokenize(program);
             var p = new Parser(tokens);
-            var e = p.parseExp(0);
+            var e = p.parseExp();
             var i = new Interpreter(new Context(null));
-            var result = i.interpretExp(e.Item1);
+            var result = i.interpretExp(e);
             Assert.AreEqual(1, (int)result);
 
 
@@ -57,9 +57,9 @@ namespace UnitTest
             var t = new Tokenizer();
             var tokens = t.tokenize(program);
             var p = new Parser(tokens);
-            var s = p.parseStatement(0);
+            var s = p.parseStatement();
             var i = new Interpreter(new Context(null));
-            var result = i.interpretStatement(s.Item1);
+            var result = i.interpretStatement(s);
             Assert.That(result, Is.Null);
         }
 

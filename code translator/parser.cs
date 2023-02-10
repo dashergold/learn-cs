@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,23 +11,26 @@ namespace code_translator
     public class Parser
     {
         private List<Token> tokens;
+        private int position;
         public Parser(List<Token> tokens)
         {
             this.tokens = tokens;
+            position = 0;
         }
 
-        public (Statement, int i) parseProgram()
+
+        public Statement parseProgram()
         {
-            int i = 0;
+            
             var statements = new List<Statement>();
-            while (i < tokens.Count)
+            while (this.position < tokens.Count)
             {
-                var (statement, i1) = parseStatement(i);
+                var statement = parseStatement();
                 statements.Add(statement);
-                i = i1;
+                
 
             }
-            return (new CompoundStatement(statements),i);
+            return new CompoundStatement(statements);
         }
 
         #region expressions
@@ -37,114 +41,115 @@ namespace code_translator
         //  (E)
         //  E+E
         //  E*E
-        public (Exp, int i) parseExp( int i)
+        public Exp parseExp( )
         {
             
-            var (e1,i1) = parseApplication( i);
-            if (i1 == tokens.Count)
+            var e1 = parseApplication( );
+            if (this.position== tokens.Count)
+
             {
-                return (e1,i1);
+                return e1;
             }
-            var b = tokens[i1];
+            var b = tokens[this.position];
             if (b.type == TokenType.PLUS)
             {
-                ++i1;
-                var (e2, i2) = parseApplication( i1);
+                ++this.position;
+                var e2 = parseApplication();
                 var e = new Combination(ExpType.SUM, e1,e2);
-                return (e,i2);
+                return e;
 
             } else if (b.type == TokenType.MINUS)
             {
-                ++i1;
-                var (e2,i2) = parseApplication( i1);
+                ++this.position;
+                var e2 = parseApplication();
                 var e = new Combination(ExpType.DIFF,e1,e2);
-                return (e,i2);
+                return e;
             }
             else if (b.type == TokenType.MULT) {
-                ++i1;
-                var (e2,i2) = parseApplication( i1);
+                ++this.position;
+                var e2 = parseApplication( );
                 var e = new Combination(ExpType.PROD, e1,e2);
-                return (e, i2);
+                return e;
             }
             else if (b.type == TokenType.RPAREN)
             {
-                return (e1, i1);
+                return e1;
             }
             else if (b.type == TokenType.EQ)
             {
-                return (e1, i1);
+                return e1;
             }
             else if (b.type == TokenType.LT)
             {
-                ++i1;
-                var (e2,i2)= parseApplication( i1);
+                ++this.position;
+                var e2= parseApplication();
                 var e = new Combination(ExpType.LESSTHAN, e1, e2);
-                return (e, i2);
+                return e;
             }
             else if (b.type == TokenType.RCURLY ||
                      b.type == TokenType.WHILE)
             {
-                return (e1, i1);
+                return e1;
             }
             throw new NotImplementedException($"Dont understand token {b.type}");
         }
-        public (Exp, int i) parseApplication( int i)
+        public Exp parseApplication( )
         {
-            var (e1, i1) = parseSimpleExp( i);
-            if (i1 == tokens.Count)
+            var e1 = parseSimpleExp();
+            if (this.position== tokens.Count)
             {
-                return (e1, i1);
+                return e1;
             }
-            if (tokens[i1].type == TokenType.LPAREN)
+            if (tokens[this.position].type == TokenType.LPAREN)
             {
-                ++i1;
+                ++this.position;
                 var args = new List<Exp>();
-                if (tokens[i1].type  == TokenType.RPAREN)
+                if (tokens[this.position].type  == TokenType.RPAREN)
                 {
-                    ++i1;
+                    ++this.position;
                     var result = new ApplicationExpression(e1,args);
-                    return (result,i1);
+                    return result;
 
                 }
                 
                 while (true)
                 {
-                    var (eArg1, i2) = parseExp( i1);
+                    var eArg1 = parseExp();
                     args.Add(eArg1);
-                    if (tokens[i1].type == TokenType.RPAREN)
+                    if (tokens[this.position].type == TokenType.RPAREN)
                     {
-                        i1 = i2 + 1;
+                        ++this.position;
 
                         var result = new ApplicationExpression(e1, args);
-                        return (result, i1);
+                        return result;
 
                     }
-                    else if (tokens[i1].type == TokenType.COMMA)
+                    else if (tokens[this.position].type == TokenType.COMMA)
                     {
                         
-                        i1 = i2 + 1;
+                        ++this.position;
                     }
                     else
                     {
-                        reportError("expected comma or rigth parenthesis");
+                        reportError("expected comma or right parenthesis");
                     }
                 }
                 
 
             }
-            return (e1, i1);
+            return e1;
         }
 
 
-        public (Exp, int i) parseSimpleExp( int i)
+        public Exp parseSimpleExp( )
         {
-            var a = tokens[i];
+            var a = tokens[this.position];
             if (a.type == TokenType.NUMBER)
             {
                 var e = new ConstantExpression((int)a.value);
                 
-                ++i;
-                return (e, i);
+                ++this.position;
+                return e;
 
 
             }
@@ -152,22 +157,22 @@ namespace code_translator
             {
                 
                 var e = new IdExpression((string)a.value);
-                ++i;
-                return (e, i);
+                ++this.position;
+                return e;
 
             }
             else if (a.type == TokenType.STRING)
             {
                 var e = new ConstantExpression((string)a.value);
                 
-                ++i;
-                return (e, i);
+                ++this.position;
+                return e;
             }
-            return (null, i);
+            return null;
         }
         #endregion
         #region statemenets
-        public (Statement, int i) parseStatement( int i)
+        public Statement parseStatement()
         {
             //statement ::= 
             //    'print' '(' Exp ')'
@@ -179,95 +184,110 @@ namespace code_translator
             
 
 
-            if (tokens.Count <= i)
+            if (tokens.Count <= this.position)
             {
-                return (null, i);
+                return null;
             }
-            var t = tokens[i];
+            var t = tokens[this.position];
             if ((t.type == TokenType.PRINT))
             {
-                ++i;
-                var (_,i2) = ExpectToken(TokenType.LPAREN,  i);
-                var (e,i3) = parseExp( i2);
-                var (_, i4) = ExpectToken(TokenType.RPAREN,  i3);
+                ++this.position;
+                ExpectToken(TokenType.LPAREN);
+                var e = parseExp();
+                ExpectToken(TokenType.RPAREN);
                 var p = new PrintStatement(e);
-                return (p, i4);
+                return p;
             }
             else if ((t.type == TokenType.ID))
             {
-                var (left, i1) = parseExp(i);
-                var (_,i2) = ExpectToken(TokenType.EQ, i1);
-                var (right, i3) = parseExp(i2);
+                var left = parseExp();
+                ExpectToken(TokenType.EQ);
+                var right = parseExp();
                 var a = new Assign(left, right);
-                return (a, i3);
+                return a;
 
             }
             else if ((t.type == TokenType.IF))
             {
-                ++i;
-                var (condition, i1) = parseExp(i);
-                var (_, i2) = ExpectToken(TokenType.LCURLY, i1);
-                var (cs, i3) = parseCompoundStatement(i2);
-                var (_, i4) = ExpectToken(TokenType.RCURLY,i3);
-                var ifstm = new IfStatement(condition, cs);
+                ++this.position;
+                var condition = parseExp();
+                ExpectToken(TokenType.LCURLY);
+                var cs = parseCompoundStatement();
+                ExpectToken(TokenType.RCURLY);
+                var ifstm = new IfStatement(condition,cs);
 
-                return (ifstm, i4);
+                return ifstm;
             }
             else if ((t.type == TokenType.WHILE))
             {
-                ++i;
-                var (condition, i1) = parseExp(i);
-                var (_, i2) = ExpectToken(TokenType.LCURLY, i1);
-                var (cs, i3) = parseCompoundStatement(i2);
-                var (_, i4) = ExpectToken(TokenType.RCURLY, i3);
+                ++this.position;
+                var condition = parseExp();
+                ExpectToken(TokenType.LCURLY);
+                var cs = parseCompoundStatement();
+                ExpectToken(TokenType.RCURLY);
                 var wstm = new WhileStatement(condition, cs);
 
-                return (wstm, i4);
+                return wstm;
+            }
+            else if (t.type == TokenType.DEFINE)
+            {
+                ++this.position;
+                var functionName = ExpectToken(TokenType.ID);
+                ExpectToken(TokenType.LPAREN);
+                //var parameters = parseParameters();
+                var parameters = new List<Exp>();
+                ExpectToken(TokenType.RPAREN);
+                ExpectToken(TokenType.LCURLY);
+                var cs = parseCompoundStatement();
+                ExpectToken(TokenType.RCURLY);
+                var dstm = new DefStatement((string)functionName.value, parameters, cs);
+                return dstm;
+
             }
             else
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException($"dont know how to parse {t.type}");
             }
             
         }
 
-        private (CompoundStatement, int) parseCompoundStatement(int i)
+        private CompoundStatement parseCompoundStatement()
         {
             var statements = new List<Statement>();
-            while (i != tokens.Count)
+            while (this.position != tokens.Count)
             {
-                if (  tokens[i].type == TokenType.RCURLY)
+                if (  tokens[this.position].type == TokenType.RCURLY)
                 {
                     
                     break;
                 }
             
-                var (s, i1) = parseStatement(i);
+                var s = parseStatement();
                 statements.Add(s);
-                i = i1;
+                
 
             }
             var cs = new CompoundStatement(statements);
-            return (cs, i);
+            return cs;
 
         }
 
         #endregion
-        private (Token, int i) ExpectToken(TokenType type,  int i)
+        private Token ExpectToken(TokenType type)
         {
-            if (tokens.Count <= i)
+            if (tokens.Count <= this.position)
             {
                 reportError($"expected {type}");
             }
-            var t = tokens[i];
-            ++i;
+            var t = tokens[this.position];
+            ++this.position;
             if ((t.type != type))
             {
                 reportError($"expected {type}, but found {t.type}");
                
             }
 
-            return (t, i);
+            return t;
         }
 
         private void reportError(string v)
