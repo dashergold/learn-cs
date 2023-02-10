@@ -114,10 +114,19 @@ namespace UnitTest
             Assert.That(value, Is.EqualTo(false));
         }
         [Test]
-        public void interpretFunction()
+        public void interpretDefStatement()
+        {
+            var program = "definera x () {svara 0}";
+            var c = interpretProgram(program);
+            var (found, value) = c.LookUp("x");
+            Assert.That(found, Is.True);
+            Assert.That(value is DefStatement, Is.EqualTo(true));
+        }
+
+        [Test]
+        public void interpretParameterlessCall()
         {
 
         }
-
     }
 }

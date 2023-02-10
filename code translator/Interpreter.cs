@@ -124,6 +124,11 @@ namespace code_translator
                 }
                 return null;
             }
+            else if (stm is DefStatement dstm)
+            {
+                this.context.SetValue(dstm.ID, dstm);
+                return null;
+            }
             else
             {
                 throw new NotImplementedException($"dont know how to interpret {stm}");
