@@ -100,6 +100,7 @@ namespace code_translator
             }
             else if (b.type == TokenType.RCURLY ||
                      b.type == TokenType.WHILE ||
+                     b.type == TokenType.COMMA ||
                      b.type == TokenType.EOF)
             {
                 return e1;
@@ -255,8 +256,8 @@ namespace code_translator
                 ++this.position;
                 var functionName = ExpectToken(TokenType.ID);
                 ExpectToken(TokenType.LPAREN);
-                //var parameters = parseParameters();
-                var parameters = new List<Exp>();
+                var parameters = parseParameters();
+
                 ExpectToken(TokenType.RPAREN);
                 ExpectToken(TokenType.LCURLY);
                 var cs = parseCompoundStatement();
@@ -286,6 +287,29 @@ namespace code_translator
             
         }
 
+        private List<Exp> parseParameters()
+        {
+            //(a.,b)
+            //(a.)
+
+            var parameters = new List<Exp>();
+            if (Peek().type != TokenType.ID)
+            {
+                return parameters;
+            }
+            var parameterName = ExpectToken(TokenType.ID);
+            parameters.Add(new IdExpression((string)parameterName.value));
+            while (Peek().type == TokenType.COMMA)
+            {
+                ++this.position;
+                parameterName = ExpectToken(TokenType.ID);
+                parameters.Add(new IdExpression((string)parameterName.value));
+
+            }
+            return parameters;
+            
+        }
+
         private CompoundStatement parseCompoundStatement()
         {
             var statements = new List<Statement>();
@@ -305,6 +329,11 @@ namespace code_translator
             var cs = new CompoundStatement(statements);
             return cs;
 
+        }
+
+        private Token Peek()
+        {
+            return this.tokens[this.position];
         }
 
         #endregion

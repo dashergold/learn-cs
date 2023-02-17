@@ -145,5 +145,41 @@ else {
 ";
             Assert.That(s.ToString(), Is.EqualTo(expected));
         }
+        [Test]
+        public void parseFunctionWithParameters()
+        {
+            var program =
+@"definera x (a,b){
+    svara a+b
+}
+";
+            var t = new Tokenizer();
+            var tokens = t.tokenize(program);
+            var p = new Parser(tokens);
+            var s = p.parseStatement();
+            Console.Write(s.ToString());
+            var expected =
+@"define x ( (a) , (b) ) {
+    return  ( (a)  +  (b) ) 
+}
+";
+            Assert.That(s.ToString(), Is.EqualTo(expected));
+        }
+        [Test]
+        public void parsFunctionCallWithTwoParameters()
+        {
+            var program =
+@"y = x (a,b)";
+            var t = new Tokenizer();
+            var tokens = t.tokenize(program);
+            var p = new Parser(tokens);
+            var s = p.parseStatement();
+            Console.Write(s.ToString());
+            var expected =
+@" (y)  =   (x) ( (a) , (b) ) 
+";
+            Assert.That(s.ToString(), Is.EqualTo(expected));
+        }
+
     }
 }

@@ -80,7 +80,24 @@ namespace code_translator
         }
         public override string ToString()
         {
-            return $"define {this.ID} () {{\r\n    {Body}}}\r\n";
+            return $"define {this.ID} ({ParametersToString()}) {{\r\n    {Body}}}\r\n";
+        }
+
+        private string ParametersToString()
+        {
+            var sb = new StringBuilder();
+            if (this.Parameters.Count == 0)
+            {
+                return "";
+
+            }
+            sb.Append(this.Parameters[0]);
+            foreach (var p in this.Parameters.Skip(1))
+            {
+                sb.Append(",");
+                sb.Append(p.ToString());
+            }
+            return sb.ToString();
         }
     }
     public class CompoundStatement:Statement

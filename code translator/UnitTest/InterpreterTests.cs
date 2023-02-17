@@ -185,5 +185,21 @@ x = y()
             Assert.That(value, Is.EqualTo(4));
 
         }
+        [Test]
+        [Ignore("need o evaluate arguments before making calls")]
+        public void interpretFunctionCallWithParameters()
+        {
+            var program =
+@"definera addera (a,b){
+    svara a+b
+}
+x = addera(1,2)
+";
+            var c = interpretProgram(program);
+            var (found, value) = c.LookUp("x");
+            Assert.That(found, Is.True);
+            Assert.That(value, Is.EqualTo(3));
+        }
+        
     }
 }
