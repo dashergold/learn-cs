@@ -38,6 +38,17 @@ namespace code_translator
             Then = then;
             Else = @else;
         }
+        public override string ToString()
+        {
+            if (Else == null)
+            {
+                return $"if {Condition} {{\r\n    {Then}\r\n}}\r\n";
+            }
+            else
+            {
+                return $"if {Condition} {{\r\n    {Then}\r\n}}\r\nelse {{\r\n    {Else}\r\n}}\r\n";
+            }
+        }
     }
     public class WhileStatement:Statement
     {

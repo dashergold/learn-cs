@@ -24,6 +24,7 @@ namespace code_translator
         PROD,
         DIFF,
         LESSTHAN,
+        GREATERTHAN,
     }
 
     public class IdExpression : Exp

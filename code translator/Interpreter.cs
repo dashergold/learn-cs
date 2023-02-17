@@ -59,7 +59,15 @@ namespace code_translator
                     var nright = (int)right;
                     return nleft < nright;
                 }
-                
+                else if (combo.Type == ExpType.GREATERTHAN)
+                {
+                    var left = interpretExp(combo.Left);
+                    var right = interpretExp(combo.Right);
+                    var nleft = (int)left;
+                    var nright = (int)right;
+                    return nleft > nright;
+                }
+
 
             }
             else if (e is ApplicationExpression a)
@@ -128,7 +136,12 @@ namespace code_translator
                 }
                 else
                 {
-                    throw new NotImplementedException("else not implemented");
+                    if (ifstm.Else != null)
+                    {
+                        return interpretStatement(ifstm.Else);
+
+                    }
+                    return null;
                 }
 
             }

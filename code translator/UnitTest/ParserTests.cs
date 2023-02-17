@@ -116,5 +116,34 @@ svara x+1
 ";
             Assert.That(s.ToString(), Is.EqualTo(expected));
         }
+
+        [Test]
+        public void parseElseStatement()
+        {
+            var program =
+@"om a < b {
+skriv(""hej"")
+}
+annars {
+skriv(""hejdå"")
+}
+";
+            var t = new Tokenizer();
+            var tokens = t.tokenize(program);
+            var p = new Parser(tokens);
+            var s = p.parseStatement();
+            Console.Write(s.ToString());
+            var expected =
+@"if  ( (a)  <  (b)   {
+    print(""hej"")
+
+}
+else {
+    print(""hejdå"")
+
+}
+";
+            Assert.That(s.ToString(), Is.EqualTo(expected));
+        }
     }
 }

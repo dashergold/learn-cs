@@ -26,7 +26,12 @@ namespace code_translator
             while (this.position < tokens.Count)
             {
                 var statement = parseStatement();
+                if (statement == null) 
+                {
+                    break;
+                }
                 statements.Add(statement);
+                
                 
 
             }
@@ -86,8 +91,16 @@ namespace code_translator
                 var e = new Combination(ExpType.LESSTHAN, e1, e2);
                 return e;
             }
+            else if (b.type == TokenType.GT)
+            {
+                ++this.position;
+                var e2 = parseApplication();
+                var e = new Combination(ExpType.GREATERTHAN, e1, e2);
+                return e;
+            }
             else if (b.type == TokenType.RCURLY ||
-                     b.type == TokenType.WHILE)
+                     b.type == TokenType.WHILE ||
+                     b.type == TokenType.EOF)
             {
                 return e1;
             }
@@ -214,8 +227,16 @@ namespace code_translator
                 ExpectToken(TokenType.LCURLY);
                 var cs = parseCompoundStatement();
                 ExpectToken(TokenType.RCURLY);
+                if (tokens[this.position].type == TokenType.ELSE)
+                {
+                    ++this.position;
+                    ExpectToken(TokenType.LCURLY);
+                    var csElse = parseCompoundStatement();
+                    ExpectToken(TokenType.RCURLY);
+                    var ifElse = new IfStatement(condition,cs,csElse);
+                    return ifElse;
+                }
                 var ifstm = new IfStatement(condition,cs);
-
                 return ifstm;
             }
             else if ((t.type == TokenType.WHILE))
@@ -250,8 +271,13 @@ namespace code_translator
                 var returnValue = parseExp();
                 var rstm = new ReturnStatement(returnValue);
                 return rstm;
+                
 
 
+            }
+            else if (t.type == TokenType.EOF)
+            {
+                return null;
             }
             else
             {

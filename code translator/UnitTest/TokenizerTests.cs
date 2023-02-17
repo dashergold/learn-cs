@@ -11,7 +11,8 @@ namespace UnitTest
         Dictionary<string, TokenType> svDict = new() {
                 { "om",TokenType.IF },
                 { "definera",TokenType.DEFINE },
-                { "svara", TokenType.RETURN }
+                { "svara", TokenType.RETURN },
+                { "annars", TokenType.ELSE }
         };
 
         [SetUp]
@@ -22,14 +23,10 @@ namespace UnitTest
         [Test]
         public void UseDifferentKeywords()
         {
-            var enDict = new Dictionary<string, TokenType> {
-                {
-                    "if",TokenType.IF
-                }
-            };
+            
             var tokenizer = new Tokenizer(enDict);
             var tokens = tokenizer.tokenize("if");
-            Assert.That(tokens.Count, Is.EqualTo(1));
+            Assert.That(tokens.Count, Is.EqualTo(2));
             Assert.That(tokens[0].type, Is.EqualTo(TokenType.IF));
 
 
@@ -40,7 +37,7 @@ namespace UnitTest
         {
             var tokenizer = new Tokenizer(enDict);
             var tokens = tokenizer.tokenize("define");
-            Assert.That(tokens.Count, Is.EqualTo(1));
+            Assert.That(tokens.Count, Is.EqualTo(2));
             Assert.That(tokens[0].type, Is.EqualTo(TokenType.DEFINE));
 
         }
@@ -50,9 +47,17 @@ namespace UnitTest
         {
             var tokenizer = new Tokenizer(svDict);
             var tokens = tokenizer.tokenize("svara");
-            Assert.That(tokens.Count, Is.EqualTo(1));
+            Assert.That(tokens.Count, Is.EqualTo(2));
             Assert.That(tokens[0].type, Is.EqualTo(TokenType.RETURN));
 
+        }
+        [Test]
+        public void TokenizeElse()
+        {
+            var tokenizer = new Tokenizer(svDict);
+            var tokens = tokenizer.tokenize("annars");
+            Assert.That(tokens.Count, Is.EqualTo(2));
+            Assert.That(tokens[0].type, Is.EqualTo(TokenType.ELSE));
         }
 
 

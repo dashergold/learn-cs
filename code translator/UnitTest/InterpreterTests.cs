@@ -84,7 +84,36 @@ namespace UnitTest
             var (found, value) = c.LookUp("x");
             Assert.That(found, Is.True);
             Assert.That(value, Is.EqualTo("mindre"));
+        
             
+        }
+        [Test]
+        public void interpretIfStatementFails()
+        {
+            var program =
+            @"om 3 > 4{
+                x=""mindre""
+            }";
+            var c = interpretProgram(program);
+            var (found, value) = c.LookUp("x");
+            Assert.That(found, Is.False);
+
+
+        }
+        [Test]
+        public void interpretIfElseStatement()
+        {
+            var program =
+            @"om 3 > 4{
+                x=""mindre""
+            }
+            annars {
+                x =""större""
+            }";
+            var c = interpretProgram(program);
+            var (found, value) = c.LookUp("x");
+            Assert.That(found, Is.True);
+            Assert.That(value, Is.EqualTo("större"));
         }
         [Test]
         public void interpretWhileStatement()

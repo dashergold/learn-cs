@@ -17,6 +17,7 @@ namespace code_translator
     }
     public enum TokenType
     {
+        EOF = 0,
         WHILE = 1,
         IF,
         ELSE,
@@ -54,10 +55,11 @@ namespace code_translator
             {"medan", TokenType.WHILE },
             {"om", TokenType.IF },
             {"importera", TokenType.IMPORT },
-            {"skriv", TokenType.PRINT},
-            {"annarsom", TokenType.ELIF},
-            {"definera", TokenType.DEFINE},
-            {"svara", TokenType.RETURN }
+            {"skriv", TokenType.PRINT },
+            {"annarsom", TokenType.ELIF },
+            {"definera", TokenType.DEFINE },
+            {"svara", TokenType.RETURN },
+            {"annars", TokenType.ELSE },
 
 
     };
@@ -300,6 +302,7 @@ namespace code_translator
                     ++i;
                 }
             }
+            tokens.Add(token(TokenType.EOF));
             return tokens;
 
         }
