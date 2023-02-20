@@ -26,6 +26,9 @@ namespace code_translator
         PLUS,
         FUNCTION,
         EQ,
+        NE,
+        GT,
+        LT,
         TRUE,
         FALSE,
         NUMBER,
@@ -37,13 +40,13 @@ namespace code_translator
         RCURLY,
         ID,
         DOT,
-        GT,
-        LT,
         IMPORT,
         PRINT,
         MINUS,
         MULT,
         DEFINE,
+        NOT,
+        
     }
     public class Tokenizer
     {
@@ -60,6 +63,7 @@ namespace code_translator
             {"definera", TokenType.DEFINE },
             {"svara", TokenType.RETURN },
             {"annars", TokenType.ELSE },
+            
 
 
     };
@@ -288,6 +292,29 @@ namespace code_translator
                 {
                     tokens.Add(token(TokenType.MULT));
                     ++i;
+                }
+                else if (c == '!')
+                {
+
+                    ++i;
+                    if (i >= text.Length)
+                    {
+                        tokens.Add(token(TokenType.NOT));
+                    }
+                    else
+                    {
+                        c = text[i];
+
+                        if (c == '=')
+                        {
+                            ++i;
+                            tokens.Add(token(TokenType.NE));
+                        }
+                        else
+                        {
+                            tokens.Add(token(TokenType.NOT));
+                        }
+                    }
                 }
                 else if (char.IsWhiteSpace(c))
                 {

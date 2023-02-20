@@ -59,6 +59,22 @@ namespace UnitTest
             Assert.That(tokens.Count, Is.EqualTo(2));
             Assert.That(tokens[0].type, Is.EqualTo(TokenType.ELSE));
         }
+        [Test]
+        public void TokenizeNot()
+        {
+            var tokenizer = new Tokenizer(svDict);
+            var tokens = tokenizer.tokenize("!");
+            Assert.That(tokens.Count, Is.EqualTo(2));
+            Assert.That(tokens[0].type, Is.EqualTo(TokenType.NOT));
+        }
+        [Test]
+        public void TokenizeNE()
+        {
+            var tokenizer = new Tokenizer(svDict);
+            var tokens = tokenizer.tokenize("!=");
+            Assert.That(tokens.Count, Is.EqualTo(2));
+            Assert.That(tokens[0].type, Is.EqualTo(TokenType.NE));
+        }
 
 
     }

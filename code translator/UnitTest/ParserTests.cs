@@ -7,8 +7,27 @@ using System.Threading.Tasks;
 
 namespace UnitTest
 {
+
     public class ParserTests
     {
+        private Exp parseExpression(string program)
+        {
+            var t = new Tokenizer();
+            var tokens = t.tokenize(program);
+            var p = new Parser(tokens);
+            var e = p.parseExp();
+            return e;
+        }
+
+        private Statement parseStatement(string program)
+        {
+            var t = new Tokenizer();
+            var tokens = t.tokenize(program);
+            var p = new Parser(tokens);
+            var s = p.parseStatement();
+            return s;
+        }
+
         [Test]
         public void testParser()
         {
@@ -46,7 +65,7 @@ namespace UnitTest
             Console.Write(s.ToString());
 
             var expected =
-@"while  ( (x)  <  (2)   {
+@"while  ( (x)  <  (2) )  {
     print(""hej"")
  (x)  =  ( (x)  +  (1) ) 
 
@@ -97,11 +116,10 @@ svara ""hej""
 
         }
         [Test]
-        [Ignore("get this to work")]
         public void parseReturnAfterAssigment()
         {
             var program =
-@" {
+@"definera y () {
 x = 3
 svara x+1
 }
@@ -112,7 +130,10 @@ svara x+1
             var s = p.parseStatement();
             Console.Write(s.ToString());
             var expected =
-@"sdkfsd ""hej""
+@"define y () {
+     (x)  =  (3) 
+return  ( (x)  +  (1) ) 
+}
 ";
             Assert.That(s.ToString(), Is.EqualTo(expected));
         }
@@ -134,7 +155,7 @@ skriv(""hejdå"")
             var s = p.parseStatement();
             Console.Write(s.ToString());
             var expected =
-@"if  ( (a)  <  (b)   {
+@"if  ( (a)  <  (b) )  {
     print(""hej"")
 
 }
@@ -181,5 +202,47 @@ else {
             Assert.That(s.ToString(), Is.EqualTo(expected));
         }
 
+        [Test]
+        public void parseNotFunction()
+        {
+            var program =
+@"medan !a{
+
+}
+";
+            var expected =
+@"while  ! ( (a) )  {
+    
+}
+";
+            var s = parseStatement(program);
+            Assert.That(s.ToString(), Is.EqualTo(expected));
+        }
+        [Test]
+        public void parseParenthesisExpression()
+        {
+
+            var e = parseExpression("(x+1)");
+            var expected = @" ( (x)  +  (1) ) ";
+            Assert.That(e.ToString(), Is.EqualTo(expected));
+        }
+        [Test]
+        public void parseMultiplication()
+        {
+
+            var e = parseExpression("3*x");
+            var expected = @" ( (3)  *  (x) ) ";
+            Assert.That(e.ToString(), Is.EqualTo(expected));
+
+        }
+        [Test]
+        public void parseNE()
+        {
+
+            var e = parseExpression("3 != 4");
+            var expected = @" ( (3)  !=  (4) ) ";
+            Assert.That(e.ToString(), Is.EqualTo(expected));
+
+        }
     }
 }

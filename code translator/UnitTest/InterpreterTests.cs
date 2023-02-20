@@ -116,6 +116,21 @@ namespace UnitTest
             Assert.That(value, Is.EqualTo("större"));
         }
         [Test]
+        public void interpretNE()
+        {
+            var program =
+            @"om 3 != 4{
+                x=""inte lika""
+            }
+            annars {
+                x =""lika""
+            }";
+            var c = interpretProgram(program);
+            var (found, value) = c.LookUp("x");
+            Assert.That(found, Is.True);
+            Assert.That(value, Is.EqualTo("inte lika"));
+        }
+        [Test]
         public void interpretWhileStatement()
         {
             var program =
@@ -133,10 +148,9 @@ namespace UnitTest
         }
 
         [Test]
-        [Ignore("to do")]
         public void interpretNot()
         {
-            var program = "x = inte(4>3)";
+            var program = "x = !(4>3)";
             var c = interpretProgram(program);
             var (found, value) = c.LookUp("x");
             Assert.That(found, Is.True);
@@ -169,7 +183,6 @@ x = y()
         }
 
         [Test]
-        [Ignore("get this to work")]
         public void interpretWithMath()
         {
             var program =

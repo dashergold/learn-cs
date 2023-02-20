@@ -25,6 +25,8 @@ namespace code_translator
         DIFF,
         LESSTHAN,
         GREATERTHAN,
+        NOT,
+        NE
     }
 
     public class IdExpression : Exp
@@ -68,6 +70,13 @@ namespace code_translator
             this .Right = Right;
 
         }
+        public Combination(ExpType Type, Exp Left)
+        {
+            this.Type = Type;
+            this.Left = Left;
+            
+
+        }
 
         public ExpType Type;
         public Exp Left;
@@ -80,11 +89,27 @@ namespace code_translator
             }
             else if (Type == ExpType.DIFF)
             {
-                return $" ({Left} - {Right} ";
+                return $" ({Left} - {Right}) ";
+            }
+            else if (Type == ExpType.PROD)
+            {
+                return $" ({Left} * {Right}) ";
             }
             else if (Type == ExpType.LESSTHAN)
             {
-                return $" ({Left} < {Right} ";
+                return $" ({Left} < {Right}) ";
+            }
+            else if (Type == ExpType.GREATERTHAN)
+            {
+                return $" ({Left} > {Right}) ";
+            }
+            else if (Type == ExpType.NE)
+            {
+                return $" ({Left} != {Right}) ";
+            }
+            else if (Type == ExpType.NOT)
+            {
+                return $" ! ({Left}) ";
             }
             else
             {

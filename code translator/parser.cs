@@ -60,20 +60,22 @@ namespace code_translator
             {
                 ++this.position;
                 var e2 = parseApplication();
-                var e = new Combination(ExpType.SUM, e1,e2);
+                var e = new Combination(ExpType.SUM, e1, e2);
                 return e;
 
-            } else if (b.type == TokenType.MINUS)
+            }
+            else if (b.type == TokenType.MINUS)
             {
                 ++this.position;
                 var e2 = parseApplication();
-                var e = new Combination(ExpType.DIFF,e1,e2);
+                var e = new Combination(ExpType.DIFF, e1, e2);
                 return e;
             }
-            else if (b.type == TokenType.MULT) {
+            else if (b.type == TokenType.MULT)
+            {
                 ++this.position;
-                var e2 = parseApplication( );
-                var e = new Combination(ExpType.PROD, e1,e2);
+                var e2 = parseApplication();
+                var e = new Combination(ExpType.PROD, e1, e2);
                 return e;
             }
             else if (b.type == TokenType.RPAREN)
@@ -84,10 +86,17 @@ namespace code_translator
             {
                 return e1;
             }
+            else if (b.type == TokenType.NE)
+            {
+                ++this.position;
+                var e2 = parseApplication();
+                var e = new Combination(ExpType.NE, e1, e2);
+                return e;
+            }
             else if (b.type == TokenType.LT)
             {
                 ++this.position;
-                var e2= parseApplication();
+                var e2 = parseApplication();
                 var e = new Combination(ExpType.LESSTHAN, e1, e2);
                 return e;
             }
@@ -98,10 +107,23 @@ namespace code_translator
                 var e = new Combination(ExpType.GREATERTHAN, e1, e2);
                 return e;
             }
+            else if (b.type == TokenType.NOT)
+            {
+                ++this.position;
+                var e2 = parseExp();
+                var e = new Combination(ExpType.NOT, e2);
+                return e;
+
+            }
             else if (b.type == TokenType.RCURLY ||
+                     b.type == TokenType.LCURLY ||
                      b.type == TokenType.WHILE ||
                      b.type == TokenType.COMMA ||
-                     b.type == TokenType.EOF)
+                     b.type == TokenType.EOF ||
+                     b.type == TokenType.DEFINE ||
+                     b.type == TokenType.RETURN ||
+                      b.type == TokenType.ID ||
+                     b.type == TokenType.PRINT)
             {
                 return e1;
             }
@@ -182,6 +204,14 @@ namespace code_translator
                 ++this.position;
                 return e;
             }
+            else if (a.type == TokenType.LPAREN)
+            {
+                ++this.position;
+                var e = parseExp();
+                ExpectToken(TokenType.RPAREN);
+                return e;
+            }
+
             return null;
         }
         #endregion
