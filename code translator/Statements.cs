@@ -67,10 +67,10 @@ namespace code_translator
     public class DefStatement:Statement
     {
         public string ID;
-        public List<Exp> Parameters;
+        public List<IdExpression> Parameters;
         public Statement Body;
 
-        public DefStatement(String functionName, List<Exp> parameters, CompoundStatement cs)
+        public DefStatement(String functionName, List<IdExpression> parameters, CompoundStatement cs)
         {
 
             this.Parameters = parameters;

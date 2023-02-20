@@ -86,7 +86,19 @@ namespace code_translator
                 {
                     throw new InvalidOperationException($"{fnname.Name} is not a function");
                 }
+                //if (def.Parameters.Count != a.Arguments.Count)
+                //{
+                //    throw new InvalidOperationException($"{fnname.Name} expected {def.Parameters.Count} arguments, but recieved {a.Arguments.Count}");
+                //}
                 var fncontext = new Context(this.context);
+                var argumentsValues = new List<object>();
+                for (int i = 0; i<a.Arguments.Count; ++i)
+                {
+                    var arg = a.Arguments[i];
+                    var parameter = def.Parameters[i];
+                    var value = interpretExp(arg);
+                    fncontext.SetValue(parameter.Name, value);
+                }             
                 var oldContext = this.context;
                 this.context = fncontext;
                 var reply = interpretStatement(def.Body);

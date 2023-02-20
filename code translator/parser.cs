@@ -287,12 +287,12 @@ namespace code_translator
             
         }
 
-        private List<Exp> parseParameters()
+        private List<IdExpression> parseParameters()
         {
             //(a.,b)
             //(a.)
 
-            var parameters = new List<Exp>();
+            var parameters = new List<IdExpression>();
             if (Peek().type != TokenType.ID)
             {
                 return parameters;
